@@ -8,7 +8,17 @@ module Kernel
   def late_addition
     1234
   end
+
+  def double_late_addition
+    11
+  end
+
+  def double_late_addition
+    22
+  end
 end
+
+
 
 class Object
   def another_late_addition
@@ -36,8 +46,12 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_preload_method_added
-    assert_equal :late_addition, Kernel.k_added_name
-    assert_equal :another_late_addition, Object.o_added_name
+    assert Kernel.k_added_names.include?(:late_addition)
+    assert Object.o_added_names.include?(:another_late_addition)
+  end
+
+  def test_double_defined_method
+    assert_raise(NoMethodError) { @bs.double.late_addition }
   end
 end
 
