@@ -231,7 +231,7 @@ class TestSpecialMarkup < Test::Unit::TestCase
 
   def test_indented_instruct
     @xml.p { @xml.instruct! :xml }
-    assert_match %r{<p>\n  <\?xml( version="1.0"| encoding="UTF-8"){2}\?>\n</p>\n},
+    assert_match %r{<p>\n  <\?xml version="1.0" encoding="UTF-8"\?>\n</p>\n},
       @xml.target!
   end
 
@@ -242,7 +242,7 @@ class TestSpecialMarkup < Test::Unit::TestCase
 
   def test_xml_instruct
     @xml.instruct!
-    assert_match /^<\?xml( version="1.0"| encoding="UTF-8"){2}\?>$/, @xml.target!
+    assert_match /^<\?xml version="1.0" encoding="UTF-8"\?>$/, @xml.target!
   end
 
   def test_xml_instruct_with_overrides
