@@ -1,5 +1,14 @@
 = Change Log
 
+== Version 1.2.2
+
+Another fix for BlankSlate.  The Kernal/Object traps added in 1.2.1
+failed when a method was defined late more than once.  Since the
+method was already marked as removed, another attempt to undefine it
+raised an error.  The fix was to check the list of instance methods
+before attempting the undef operation.  Thanks to Florian Gross and
+David Heinemeier Hansson for the patch.
+
 == Version 1.2.1
 
 BlankSlate now traps method definitions in Kernel and Object to avoid
