@@ -247,7 +247,12 @@ class TestSpecialMarkup < Test::Unit::TestCase
 
   def test_xml_instruct_with_overrides
     @xml.instruct! :xml, :encoding=>"UCS-2"
-    assert_match /^<\?xml( version="1.0"| encoding="UCS-2"){2}\?>$/, @xml.target!
+    assert_match /^<\?xml version="1.0" encoding="UCS-2"\?>$/, @xml.target!
+  end
+
+  def test_xml_instruct_with_standalong
+    @xml.instruct! :xml, :encoding=>"UCS-2", :standalone=>"yes"
+    assert_match /^<\?xml version="1.0" encoding="UCS-2" standalone="yes"\?>$/, @xml.target!
   end
 
   def test_no_blocks
