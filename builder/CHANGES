@@ -1,5 +1,10 @@
 = Change Log
 
+== Version 1.2.3
+
+The attributes in the <?xml ... ?> instruction will be ordered:
+version, encoding, standalone.
+
 == Version 1.2.2
 
 Another fix for BlankSlate.  The Kernal/Object traps added in 1.2.1
