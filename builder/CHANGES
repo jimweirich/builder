@@ -1,5 +1,11 @@
 = Change Log
 
+== Version 1.2.1
+
+BlankSlate now traps method definitions in Kernel and Object to avoid
+late method definitions inadvertently becoming part of the definition
+of BlankSlate as well.
+
 == Version 1.2.0
 
 Improved support for entity declarations by allowing nested
