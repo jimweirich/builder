@@ -17,7 +17,7 @@ rescue Exception
   nil
 end
 
-PKG_VERSION = "1.2.0.1"
+PKG_VERSION = "1.2.1"
 
 SRC_RB = FileList['lib/**/*.rb']
 
