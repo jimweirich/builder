@@ -77,7 +77,7 @@ module Builder
     # Append text to the output target.  Escape any markup.  May be
     # used within the markup brakets as:
     #
-    #   builder.p { br; text! "HI" }   #=>  <p><br/>HI</p>
+    #   builder.p { |b| b.br; b.text! "HI" }   #=>  <p><br/>HI</p>
     def text!(text)
       _text(_escape(text))
     end
@@ -93,7 +93,7 @@ module Builder
     #
     # It is also useful for stacking builder objects.  Builders only
     # use <tt><<</tt> to append to the target, so by supporting this
-    # method/operation builders can use oother builders as their
+    # method/operation builders can use other builders as their
     # targets.
     def <<(text)
       _text(text)
