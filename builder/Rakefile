@@ -17,7 +17,7 @@ rescue Exception
   nil
 end
 
-PKG_VERSION = "1.2.2"
+PKG_VERSION = "1.2.2.1"
 
 SRC_RB = FileList['lib/**/*.rb']
 
@@ -63,7 +63,13 @@ else
     s.name = 'builder'
     s.version = PKG_VERSION
     s.summary = "Builders for MarkUp."
-    s.description = %{Simple builder classes for creating markup.}
+    s.description = <<EOS
+Builder provides a number of builder objects that make creating structured data
+simple to do.  Currently the following builder objects are supported:
+
+* XML Markup
+* XML Events	
+EOS
 
     s.files = PKG_FILES.to_a
 
