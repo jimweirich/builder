@@ -82,5 +82,5 @@ else
     s.homepage = "http://onestepback.org"
   end
 
-  Rake::GemPackageTask.new(spec) do end
+  Rake::GemPackageTask.new(spec) do  end
 end
