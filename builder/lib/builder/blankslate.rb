@@ -15,7 +15,37 @@ module Builder
   # BlankSlate is useful as a base class when writing classes that
   # depend upon <tt>method_missing</tt> (e.g. dynamic proxies).
   class BlankSlate
-    instance_methods.each { |m| undef_method m unless m =~ /^(__|instance_eval)/ }
-  end
+    class << self
+      def hide(name)
+	undef_method name unless name =~ /^(__|instance_eval)/
+      end
+    end
 
+    instance_methods.each { |m| hide(m) }
+  end
+end
+
+# Since Ruby is very dynamic, methods added to the ancestors of
+# BlankSlate <em>after BlankSlate is defined</em> will show up in the
+# list of available BlankSlate methods.  We handle this by defining a hook in the Object and Kernel classes that will hide any defined 
+module Kernel
+  class << self
+    alias_method :blank_slate_method_added, :method_added
+    def method_added(name)
+      blank_slate_method_added(name)
+      return if self != Kernel
+      Builder::BlankSlate.hide(name)
+    end
+  end
+end
+
+class Object
+  class << self
+    alias_method :blank_slate_method_added, :method_added
+    def method_added(name)
+      blank_slate_method_added(name)
+      return if self != Object
+      Builder::BlankSlate.hide(name)
+    end
+  end
 end
