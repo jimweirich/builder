@@ -1,0 +1,86 @@
+# Rakefile for rake        -*- ruby -*-
+
+# Copyright 2004 by Jim Weirich (jim@weirichhouse.org).
+# All rights reserved.
+
+# Permission is granted for use, copying, modification, distribution,
+# and distribution of modified versions of this work as long as the
+# above copyright notice is included.
+
+require 'rake/clean'
+require 'rake/testtask'
+require 'rake/rdoctask'
+begin
+  require 'rubygems'
+  require 'rake/gempackagetask'
+rescue Exception
+  nil
+end
+
+PKG_VERSION = "1.2.0"
+
+SRC_RB = FileList['lib/**/*.rb']
+
+# The default task is run if rake is given no explicit arguments.
+
+desc "Default Task"
+task :default => :test
+
+# Test Tasks ---------------------------------------------------------
+
+Rake::TestTask.new do |t|
+  t.test_files = FileList['test/test*.rb']
+  t.verbose = true
+end
+
+# Create a task to build the RDOC documentation tree.
+
+rd = Rake::RDocTask.new("rdoc") { |rdoc|
+  rdoc.rdoc_dir = 'html'
+  rdoc.title    = "Builder for Markup"
+  rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README'
+  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*')
+}
+
+# ====================================================================
+# Create a task that will package the Rake software into distributable
+# gem files.
+
+PKG_FILES = FileList[
+  'lib/**/*.rb', 
+  'test/**/*.rb',
+]
+
+if ! defined?(Gem)
+  puts "Package Target requires RubyGEMs"
+else
+  spec = Gem::Specification.new do |s|
+    
+    #### Basic information.
+
+    s.name = 'builder'
+    s.version = PKG_VERSION
+    s.summary = "Builders for MarkUp."
+    s.description = %{Simple builder classes for creating markup.}
+
+    s.files = PKG_FILES.to_a
+
+    s.require_path = 'lib'
+    s.autorequire = 'builder'
+
+    s.test_files = Dir['test/test*.rb']
+
+    s.has_rdoc = true
+    s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
+    s.rdoc_options <<
+      '--title' <<  'Builder -- Easy XML Building' <<
+      '--main' << 'README' <<
+      '--line-numbers'
+
+    s.author = "Jim Weirich"
+    s.email = "jim@weirichhouse.org"
+    s.homepage = "http://onestepback.org"
+  end
+
+  Rake::GemPackageTask.new(spec) do end
+end

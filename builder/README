@@ -1,0 +1,148 @@
+= Project: Builder
+
+= Goal
+
+Provide a simple way to create XML markup and data structures.
+
+= Classes
+
+Builder::XmlMarkup:: Generate XML markup notiation
+Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
+
+<b>Notes</b>:: 
+
+* An <tt>Builder::XmlTree</tt> class to generate XML tree
+  (i.e. DOM-like) structures is also planned, but not yet implemented.
+  Also, the events builder is currently lagging the markup builder in
+  features.
+
+= Usage
+
+  require 'rubygems'	
+  require_gem 'builder', '~> 1.2"
+
+  builder = Builder::XmlMarkup.new
+  xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
+  xml #=> <person><name>Jim</name><phone>555-1234</phone></person>
+
+or
+
+  require 'rubygems'	
+  require_gem 'builder'
+
+  builder = Builder::XmlMarkup.new(:target=>STDOUT, :indent=>2)
+  builder.person { |b| b.name("Jim"); b.phone("555-1234") }
+  #
+  # Prints:
+  # <person>
+  #   <name>Jim</name>
+  #   <phone>555-1234</phone>
+  # </person
+
+= Compatibility
+
+Version 1.0.0 introduces some changes that are not backwards
+compatible with earlier releases of builder.  The main areas of
+incompatibility are:
+
+* Keyword based arguments to +new+ (rather than positional based).  It
+  was found that a developer would often like to specify indentation
+  without providing an explicit target, or specify a target without
+  indentation.  Keyword based arguments handle this situation nicely.
+
+* Builder must now be an explicit target for markup tags.  Instead of
+  writing
+
+    xml_markup = Builder::XmlMarkup.new
+    xml_markup.div { strong("text") }
+
+  you need to write
+
+    xml_markup = Builder::XmlMarkup.new
+    xml_markup.div { xml_markup.strong("text") }
+
+* The builder object is passed as a parameter to all nested markup
+  blocks.  This allows you to create a short alias for the builder
+  object that can be used within the block.  For example, the previous
+  example can be written as:
+
+    xml_markup = Builder::XmlMarkup.new
+    xml_markup.div { |xml| xml.strong("text") }
+
+* If you have both a pre-1.0 and a post-1.0 gem of builder installed,
+  you can choose which version to use through the RubyGems
+  +require_gem+ facility.
+
+    require_gem 'builder', "~> 0.0"   # Gets the old version
+    require_gem 'builder', "~> 1.0"   # Gets the new version
+
+= New Features
+
+* XML Comments are now supported ...
+
+    xml_markup.comment! "This is a comment"
+      #=>  <!-- This is a comment -->
+
+* XML processing instructions are now supported ...
+
+    xml_markup.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+      #=>  <?xml version="1.0" encoding="UTF-8"?>
+   
+  If the processing instruction is omitted, it defaults to "xml".
+  When the processing instruction is "xml", the defaults attributes
+  are:
+  
+  <b>version</b>:: 1.0
+  <b>encoding</b>:: "UTF-8"
+
+* XML entity declarations are now supported to a small degree.
+
+    xml_markup.declare! :DOCTYPE, :chapter, :SYSTEM, "../dtds/chapter.dtd"
+      #=>  <!DOCTYPE chapter SYSTEM "../dtds/chapter.dtd">
+
+  The parameters to a declare! method must be either symbols or
+  strings. Symbols are inserted without quotes, and strings are
+  inserted with double quotes.  Attribute-like arguments in hashes are
+  not allowed.
+
+  If you need to have an argument to declare! be inserted without
+  quotes, but the arguement does not conform to the typical Ruby
+  syntax for symbols, then use the +intern+ method on a string to
+  convert it to a symbol.
+
+    xml_markup.declare! :ELEMENT, :chapter, "(title,para+)".intern
+      #=>  <!ELEMENT chapter (title,para+)>
+
+  Nested entity declarations are allowed.  For example:
+
+    @xml_markup.declare! :DOCTYPE, :chapter do |x|
+      x.declare! :ELEMENT, :chapter, "(title,para+)".intern
+      x.declare! :ELEMENT, :title, "(#PCDATA)".intern
+      x.declare! :ELEMENT, :para, "(#PCDATA)".intern
+    end
+
+    #=>
+
+    <!DOCTYPE chapter [
+      <!ELEMENT chapter (title,para+)>
+      <!ELEMENT title (#PCDATA)>
+      <!ELEMENT para (#PCDATA)>
+    ]>
+
+* Direct support for XML namespaces is now available.  If the first
+  argument to a tag call is a symbol, it will be joined to the tag to
+  produce a namespace:tag combination.  It is easier to show this than
+  describe it.
+
+   xml.SOAP :Envelope do ... end
+
+  Just put a space before the colon in a namespace to produce the
+  right form for builder (e.g. "<tt>SOAP:Envelope</tt>" =>
+  "<tt>xml.SOAP :Envelope</tt>")
+
+= Contact
+
+Author::     Jim Weirich
+Email::      jim@weirichhouse.org
+Home Page::  http://onestepback.org
+License::     Open Source

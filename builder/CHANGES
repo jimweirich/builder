@@ -1,0 +1,26 @@
+= Change Log
+
+== Version 1.2.0
+
+Improved support for entity declarations by allowing nested
+declarations and removal of the attribute processing.
+
+Added namespace support.
+
+== Version 1.1.0
+
+Added support for comments, entity declarations and processing instructions.
+
+== Version 1.0.0
+
+Removed use of <tt>instace_eval</tt> making the use of XmlMarkup much
+less prone to error.
+
+== Version 0.1.1
+
+Bug fix.
+
+== Version 0.1.0
+
+Initial version release.
+
