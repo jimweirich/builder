@@ -17,7 +17,7 @@ rescue Exception
   nil
 end
 
-PKG_VERSION = "1.2.0"
+PKG_VERSION = "1.2.0.1"
 
 SRC_RB = FileList['lib/**/*.rb']
 
@@ -40,6 +40,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README'
   rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*')
+  rdoc.template = 'jamis'
 }
 
 # ====================================================================
@@ -49,6 +50,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
 PKG_FILES = FileList[
   'lib/**/*.rb', 
   'test/**/*.rb',
+  'scripts/**/*.rb'
 ]
 
 if ! defined?(Gem)
@@ -84,3 +86,5 @@ else
 
   Rake::GemPackageTask.new(spec) do  end
 end
+
+require 'scripts/publish'

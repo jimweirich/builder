@@ -1,10 +1,10 @@
 = Project: Builder
 
-= Goal
+== Goal
 
 Provide a simple way to create XML markup and data structures.
 
-= Classes
+== Classes
 
 Builder::XmlMarkup:: Generate XML markup notiation
 Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
@@ -16,7 +16,7 @@ Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
   Also, the events builder is currently lagging the markup builder in
   features.
 
-= Usage
+== Usage
 
   require 'rubygems'	
   require_gem 'builder', '~> 1.2"
@@ -39,7 +39,7 @@ or
   #   <phone>555-1234</phone>
   # </person
 
-= Compatibility
+== Compatibility
 
 Version 1.0.0 introduces some changes that are not backwards
 compatible with earlier releases of builder.  The main areas of
@@ -76,7 +76,7 @@ incompatibility are:
     require_gem 'builder', "~> 0.0"   # Gets the old version
     require_gem 'builder', "~> 1.0"   # Gets the new version
 
-= New Features
+== New Features
 
 * XML Comments are now supported ...
 
@@ -140,7 +140,7 @@ incompatibility are:
   right form for builder (e.g. "<tt>SOAP:Envelope</tt>" =>
   "<tt>xml.SOAP :Envelope</tt>")
 
-= Contact
+== Contact
 
 Author::     Jim Weirich
 Email::      jim@weirichhouse.org
