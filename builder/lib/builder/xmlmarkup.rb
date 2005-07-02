@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #--
-# Copyright 2004 by Jim Weirich (jim@weirichhouse.org).
+# Copyright 2004, 2005 by Jim Weirich (jim@weirichhouse.org).
 # All rights reserved.
 
 # Permission is granted for use, copying, modification, distribution,
@@ -239,6 +239,18 @@ module Builder
 	[:version, :encoding, :standalone])
     end
 
+    # Insert a CDATA section into the XML markup.
+    #
+    # For example:
+    #
+    #    xml.cdata!("text to be included in cdata")
+    #        #=> <![CDATA[text to be included in cdata]]>
+    #
+    def cdata!(text)
+      _ensure_no_block block_given?
+      _special("<![CDATA[", "]]>", text, nil)
+    end
+    
     private
 
     # NOTE: All private methods of a builder object are prefixed when

@@ -263,6 +263,16 @@ class TestSpecialMarkup < Test::Unit::TestCase
       @xml.comment!(:element) { |x| x.hi }
     end
   end
+
+  def test_cdata
+    @xml.cdata!("TEST")
+    assert_equal "<![CDATA[TEST]]>\n", @xml.target!
+  end
+
+  def test_cdata_with_ampersand
+    @xml.cdata!("TEST&CHECK")
+    assert_equal "<![CDATA[TEST&CHECK]]>\n", @xml.target!
+  end
 end
 
 class TestIndentedXmlMarkup < Test::Unit::TestCase

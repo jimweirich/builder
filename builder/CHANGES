@@ -1,5 +1,9 @@
 = Change Log
 
+== Version 1.2.4
+
+* Added a cdata! command to an XML Builder.
+
 == Version 1.2.3
 
 The attributes in the <?xml ... ?> instruction will be ordered:
