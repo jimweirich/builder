@@ -11,3 +11,4 @@
 
 require 'builder/xmlmarkup'
 require 'builder/xmlevents'
+require 'builder/css'
