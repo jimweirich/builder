@@ -160,11 +160,6 @@ module Builder
       self
     end
 
-    # Append text to the output target.
-    def text!(text)
-      _text(text)
-    end
-
     # "Cargo culted" from Jim who also "cargo culted" it.  See xmlbase.rb.
     def nil?
       false
@@ -189,12 +184,12 @@ module Builder
     end
     
     def _newline
-      text! "\n"
+      _text "\n"
     end
     
     def _indent
       return if @indent == 0
-      text!(' ' * @indent)
+      _text ' ' * @indent
     end
 
     def _nested_structures(block)
@@ -215,7 +210,7 @@ module Builder
     end
 
     def _css_line(sym, *args)
-      text!("#{sym.to_s.gsub('_','-')}: #{args * ' '};")
+      _text("#{sym.to_s.gsub('_','-')}: #{args * ' '};")
     end
   end
 end
