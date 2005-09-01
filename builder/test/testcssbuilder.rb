@@ -90,4 +90,14 @@ class TestCSS < Test::Unit::TestCase
     @css.h1 + @css.span + @css.span
     assert_equal "h1 + span + span", @css.target!
   end
+
+  def test_all
+    @css.h1 * @css.h2 { color 'green' }
+    assert_equal "h1 , h2 {\n  color: green;\n}\n\n", @css.target!
+  end
+
+  def test_all_with_atts
+    @css.h1(:class => 'foo') * @css.h2(:class => 'bar') { color 'green' }
+    assert_equal "h1.foo , h2.bar {\n  color: green;\n}\n\n", @css.target!
+  end
 end

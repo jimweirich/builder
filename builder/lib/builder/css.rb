@@ -118,6 +118,11 @@ module Builder
       self
     end
 
+    def *(part)
+      _join_with_op! ','
+      self
+    end
+
     # Return the target of the builder
     def target!
       @target * ''
@@ -149,7 +154,7 @@ module Builder
           _css_line(sym, *args)
           _newline
         else
-          @target << sym.to_s
+          _start_container(sym, args.first, false)
         end
       end
       self
@@ -198,11 +203,11 @@ module Builder
       @in_block = false
     end
 
-    def _start_container(sym, atts = {})
+    def _start_container(sym, atts = {}, with_bracket = true)
       selector = sym.to_s
       selector << ".#{atts[:class]}" if atts && atts[:class]
       selector << '#' + "#{atts[:id]}" if atts && atts[:id]
-      @target << "#{selector} {"
+      @target << "#{selector}#{with_bracket ? ' {' : ''}"
     end
 
     def _end_container
