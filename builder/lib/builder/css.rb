@@ -100,12 +100,24 @@ module Builder
     #
     def initialize(indent=2)
       @indent = indent
-      @target = ''
+      @target  = []
+    end
+
+    def +(part)
+      _join_with_op! '+'
+    end
+
+    def >>(part)
+      _join_with_op! ''
+    end
+
+    def >(part)
+      _join_with_op! '>'
     end
 
     # Return the target of the builder
     def target!
-      @target
+      @target * ''
     end
 
     # Create a comment string in the output.
@@ -129,11 +141,15 @@ module Builder
         _start_container(sym, args.first)
         _css_block(block)
       else
-        _indent
-        _css_line(sym, *args)
-        _newline
+        if @in_block
+          _indent
+          _css_line(sym, *args)
+          _newline
+        else
+          @target << sym.to_s
+        end
       end
-      @target
+      self
     end
 
     # Append text to the output target.
@@ -147,6 +163,11 @@ module Builder
     end
 
     private
+    def _join_with_op!(op)
+      lhs, rhs = @target.shift, @target.shift
+      @target.unshift "#{lhs} #{op} #{rhs}"
+    end
+    
     def _text(text)
       @target << text
     end
@@ -169,7 +190,9 @@ module Builder
     end
 
     def _nested_structures(block)
+      @in_block = true
       self.instance_eval(&block)
+      @in_block = false
     end
 
     def _start_container(sym, atts = {})
