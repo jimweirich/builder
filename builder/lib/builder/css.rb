@@ -105,14 +105,17 @@ module Builder
 
     def +(part)
       _join_with_op! '+'
+      self
     end
 
     def >>(part)
       _join_with_op! ''
+      self
     end
 
     def >(part)
       _join_with_op! '>'
+      self
     end
 
     # Return the target of the builder

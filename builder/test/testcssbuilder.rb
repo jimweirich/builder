@@ -85,4 +85,9 @@ class TestCSS < Test::Unit::TestCase
     @css.h1 > @css.span { color 'green' }
     assert_equal "h1 > span {\n  color: green;\n}\n\n", @css.target!
   end
+
+  def test_multiple_op
+    @css.h1 + @css.span + @css.span
+    assert_equal "h1 + span + span", @css.target!
+  end
 end
