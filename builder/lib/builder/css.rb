@@ -102,6 +102,7 @@ module Builder
       @indent      = indent
       @target      = []
       @parts       = []
+      @library     = {}
     end
 
     def +(part)
@@ -146,6 +147,25 @@ module Builder
       _css_block(block) if block
       _unify_block
       self
+    end
+
+    def store!(sym, &block)
+      @library[sym] = block.to_proc
+    end
+
+    def group!(*args, &block)
+      args.each do |arg|
+        if arg.is_a?(Symbol)
+          instance_eval(&@library[arg])
+        else
+          instance_eval(&arg)
+        end
+        _text ', ' unless arg == args.last
+      end
+      if block
+        _css_block(block)
+        _unify_block
+      end
     end
 
     def method_missing(sym, *args, &block)
