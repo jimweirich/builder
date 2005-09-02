@@ -92,12 +92,24 @@ class TestCSS < Test::Unit::TestCase
   end
 
   def test_all
-    @css.h1 * @css.h2 { color 'green' }
+    @css.h1 | @css.h2 { color 'green' }
     assert_equal "h1 , h2 {\n  color: green;\n}\n\n", @css.target!
   end
 
   def test_all_with_atts
-    @css.h1(:class => 'foo') * @css.h2(:class => 'bar') { color 'green' }
+    @css.h1(:class => 'foo') | @css.h2(:class => 'bar') { color 'green' }
     assert_equal "h1.foo , h2.bar {\n  color: green;\n}\n\n", @css.target!
+  end
+
+  def test_multiple_basic
+    @css.body { color 'green' }
+    @css.h1   { color 'green' }
+    assert_equal "body {\n  color: green;\n}\n\nh1 {\n  color: green;\n}\n\n", @css.target!
+  end
+
+  def test_multiple_ops
+    @css.body { color 'green' }
+    @css.body > @css.h1 { color 'green' }
+    assert_equal "body {\n  color: green;\n}\n\nbody > h1 {\n  color: green;\n}\n\n", @css.target!
   end
 end

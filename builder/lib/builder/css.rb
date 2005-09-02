@@ -99,8 +99,9 @@ module Builder
     #           indentation and no line breaks).
     #
     def initialize(indent=2)
-      @indent = indent
-      @target  = []
+      @indent      = indent
+      @target      = []
+      @parts       = []
     end
 
     def +(part)
@@ -136,13 +137,15 @@ module Builder
     def id!(arg, &block)
       _start_container('#'+arg.to_s, nil, block_given?)
       _css_block(block) if block
+      _unify_block
       self
     end
 
     def class!(arg, &block)
       _start_container('.'+arg.to_s, nil, block_given?)
       _css_block(block) if block
-      
+      _unify_block
+      self
     end
 
     def method_missing(sym, *args, &block)
@@ -150,14 +153,15 @@ module Builder
       if block
         _start_container(sym, args.first)
         _css_block(block)
+        _unify_block
+      elsif @in_block
+        _indent
+        _css_line(sym, *args)
+        _newline
+        return self
       else
-        if @in_block
-          _indent
-          _css_line(sym, *args)
-          _newline
-        else
-          _start_container(sym, args.first, false)
-        end
+        _start_container(sym, args.first, false)
+        _unify_block
       end
       self
     end
@@ -168,21 +172,30 @@ module Builder
     end
 
     private
+    def _unify_block
+      @target << @parts * ''
+      @parts = []
+    end
+    
     def _join_with_op!(op)
-      lhs, rhs = @target.shift, @target.shift
-      @target.unshift "#{lhs} #{op} #{rhs}"
+      rhs, lhs = @target.pop, @target.pop
+      @target << "#{lhs} #{op} #{rhs}"
     end
     
     def _text(text)
-      @target << text
+      @parts << text
     end
 
     def _css_block(block)
-        _newline
-        _nested_structures(block)
-        _end_container
-        _newline
-        _newline
+      _newline
+      _nested_structures(block)
+      _end_container
+      _end_block
+    end
+
+    def _end_block
+      _newline
+      _newline
     end
     
     def _newline
@@ -190,7 +203,6 @@ module Builder
     end
     
     def _indent
-      return if @indent == 0
       _text ' ' * @indent
     end
 
@@ -204,11 +216,11 @@ module Builder
       selector = sym.to_s
       selector << ".#{atts[:class]}" if atts && atts[:class]
       selector << '#' + "#{atts[:id]}" if atts && atts[:id]
-      @target << "#{selector}#{with_bracket ? ' {' : ''}"
+      @parts << "#{selector}#{with_bracket ? ' {' : ''}"
     end
 
     def _end_container
-      @target << "}"
+      @parts << "}"
     end
 
     def _css_line(sym, *args)
