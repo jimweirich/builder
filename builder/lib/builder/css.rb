@@ -118,7 +118,7 @@ module Builder
       self
     end
 
-    def *(part)
+    def |(part)
       _join_with_op! ','
       self
     end
@@ -134,13 +134,15 @@ module Builder
     end
 
     def id!(arg, &block)
-      _start_container('#'+arg.to_s)
-      _css_block(block)
+      _start_container('#'+arg.to_s, nil, block_given?)
+      _css_block(block) if block
+      self
     end
 
     def class!(arg, &block)
-      _start_container('.'+arg.to_s)
-      _css_block(block)
+      _start_container('.'+arg.to_s, nil, block_given?)
+      _css_block(block) if block
+      
     end
 
     def method_missing(sym, *args, &block)
