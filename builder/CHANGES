@@ -2,7 +2,7 @@
 
 == Version 1.2.4
 
-* Added a cdata! command to an XML Builder.
+* Added a cdata! command to an XML Builder (from Josh Knowles).
 
 == Version 1.2.3
 
