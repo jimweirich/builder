@@ -1,5 +1,10 @@
 = Change Log
 
+== Pre-Version 1.2.5
+
+* Added doc directory
+* Added unit tests for XmlEvents.
+
 == Version 1.2.4
 
 * Added a cdata! command to an XML Builder (from Josh Knowles).
