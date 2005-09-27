@@ -76,14 +76,14 @@ incompatibility are:
     require_gem 'builder', "~> 0.0"   # Gets the old version
     require_gem 'builder', "~> 1.0"   # Gets the new version
 
-== New Features
+== Features
 
-* XML Comments are now supported ...
+* XML Comments are supported ...
 
     xml_markup.comment! "This is a comment"
       #=>  <!-- This is a comment -->
 
-* XML processing instructions are now supported ...
+* XML processing instructions are supported ...
 
     xml_markup.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
       #=>  <?xml version="1.0" encoding="UTF-8"?>
@@ -129,7 +129,7 @@ incompatibility are:
       <!ELEMENT para (#PCDATA)>
     ]>
 
-* Direct support for XML namespaces is now available.  If the first
+* Some support for XML namespaces is now available.  If the first
   argument to a tag call is a symbol, it will be joined to the tag to
   produce a namespace:tag combination.  It is easier to show this than
   describe it.
@@ -139,6 +139,24 @@ incompatibility are:
   Just put a space before the colon in a namespace to produce the
   right form for builder (e.g. "<tt>SOAP:Envelope</tt>" =>
   "<tt>xml.SOAP :Envelope</tt>")
+
+* Attributes to tags are not escaped by default.  This allows you to
+  use entities in attrbites.  Many people do not need this facility
+  and would prefer that attributes be automatically escaped.  If you
+  _want_ escaped attributes, use the <tt>:escape_attrs</tt> option to
+  enable this.
+
+  Default behavior:
+
+   xml = Builder::XmlMarkup.new
+   xml.ref(:id => "H&amp;R")
+     #=>  <ref id="H&amp;R"/>
+
+  Behavior with the <tt>:escape_attrs</tt> set to true:
+
+   xml = Builder::XmlMarkup.new(:escape_attrs=>true)
+   xml.ref(:id => "H&R")
+     #=> <ref id="H&amp;R"/>
 
 == Contact
 
