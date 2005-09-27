@@ -118,6 +118,10 @@ module Builder
 	gsub(%r{>}, '&gt;')
     end
 
+    def _escape_quote(text)
+      _escape(text).gsub(%r{"}, '&quot;')
+    end
+
     def _capture_outer_self(block)
       @self = eval("self", block)
     end
