@@ -1,5 +1,15 @@
 #!/usr/bin/env ruby
 
+#--
+# Portions copyright 2004 by Jim Weirich (jim@weirichhouse.org).
+# Portions copyright 2005 by Sam Ruby (rubys@intertwingly.net).
+# All rights reserved.
+
+# Permission is granted for use, copying, modification, distribution,
+# and distribution of modified versions of this work as long as the
+# above copyright notice is included.
+#++
+
 require 'test/unit'
 require 'test/preload'
 require 'builder'
@@ -32,6 +42,26 @@ class TestMarkup < Test::Unit::TestCase
   def test_attributes
     @xml.ref(:id => 12)
     assert_equal %{<ref id="12"/>}, @xml.target!
+  end
+
+  def test_attributes_are_unquoted_by_default
+    @xml.ref(:id => "H&amp;R")
+    assert_equal %{<ref id="H&amp;R"/>}, @xml.target!
+  end
+
+  def test_attributes_quoted_can_be_turned_on
+    @xml = Builder::XmlMarkup.new(:escape_attrs => true)
+    @xml.ref(:id => "<H&R \"block\">")
+    assert_equal %{<ref id="&lt;H&amp;R &quot;block&quot;&gt;"/>}, @xml.target!
+  end
+
+  def test_mixed_attribute_quoting_with_nested_builders
+    x = Builder::XmlMarkup.new(:escape_attrs=>true, :target=>@xml)
+    @xml.ref(:id=>"H&amp;R") {
+      x.element(:tag=>"Long&Short")
+    }
+    assert_equal "<ref id=\"H&amp;R\"><element tag=\"Long&amp;Short\"/></ref>",
+      @xml.target!
   end
 
   def test_multiple_attributes
@@ -114,6 +144,44 @@ class TestMarkup < Test::Unit::TestCase
   def name
     "bob"
   end
+end
+
+class TestAttributeEscaping < Test::Unit::TestCase
+
+  def setup
+    @xml = Builder::XmlMarkup.new(:escape_attrs => true)
+  end
+
+  def test_element_gt
+    @xml.title('1<2')
+    assert_equal '<title>1&lt;2</title>', @xml.target!
+  end
+
+  def test_element_amp
+    @xml.title('AT&T')
+    assert_equal '<title>AT&amp;T</title>', @xml.target!
+  end
+
+  def test_element_amp2
+    @xml.title('&amp;')
+    assert_equal '<title>&amp;amp;</title>', @xml.target!
+  end
+
+  def test_attr_less
+    @xml.a(:title => '2>1')
+    assert_equal '<a title="2&gt;1"/>', @xml.target!
+  end
+
+  def test_attr_amp
+    @xml.a(:title => 'AT&T')
+    assert_equal '<a title="AT&amp;T"/>', @xml.target!
+  end
+
+  def test_attr_quot
+    @xml.a(:title => '"x"')
+    assert_equal '<a title="&quot;x&quot;"/>', @xml.target!
+  end
+
 end
 
 class TestNameSpaces < Test::Unit::TestCase
