@@ -165,17 +165,25 @@ module Builder
     # :target=><em>target_object</em>::
     #    Object receiving the markup.  +out+ must respond to the
     #    <tt><<</tt> operator.  The default is a plain string target.
+    #    
     # :indent=><em>indentation</em>::
     #    Number of spaces used for indentation.  The default is no
     #    indentation and no line breaks.
+    #    
     # :margin=><em>initial_indentation_level</em>::
     #    Amount of initial indentation (specified in levels, not
     #    spaces).
+    #    
+    # :escape_attrs=><em>true_or_false</em>::
+    #    If true, attributes will automatically be escaped in the
+    #    output.  If false (the default), attributes will not be
+    #    escaped.
     #    
     def initialize(options={})
       indent = options[:indent] || 0
       margin = options[:margin] || 0
       super(indent, margin)
+      @escape_attrs = options[:escape_attrs] || false
       @target = options[:target] || ""
     end
     
@@ -290,11 +298,15 @@ module Builder
       return if attrs.nil?
       order.each do |k|
 	v = attrs[k]
-	@target << %{ #{k}="#{v}"} if v
+	@target << %{ #{k}="#{_attr_value(v)}"} if v
       end
       attrs.each do |k, v|
-	@target << %{ #{k}="#{v}"} unless order.member?(k)
+	@target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k)
       end
+    end
+
+    def _attr_value(value)
+      @escape_attrs ? _escape_quote(value) : value
     end
 
     def _ensure_no_block(got_block)
