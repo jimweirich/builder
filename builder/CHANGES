@@ -2,6 +2,7 @@
 
 == Pre-Version 1.2.5
 
+* Added :escape_attrs option to the markup builder.
 * Added doc directory
 * Added unit tests for XmlEvents.
 
