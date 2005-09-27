@@ -28,6 +28,9 @@ task :default => :test
 
 # Test Tasks ---------------------------------------------------------
 
+task :ta => [:test]
+task :tu => [:test]
+
 Rake::TestTask.new do |t|
   t.test_files = FileList['test/test*.rb']
   t.verbose = true
@@ -93,4 +96,9 @@ EOS
   Rake::GemPackageTask.new(spec) do  end
 end
 
+desc "Look for Debugging print lines"
+task :dbg do
+  FileList['**/*.rb'].egrep /\bDBG|\bbreakpoint\b/
+end
+  
 require 'scripts/publish'
