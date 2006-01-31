@@ -107,18 +107,19 @@ incompatibility are:
 
   If you need to have an argument to declare! be inserted without
   quotes, but the arguement does not conform to the typical Ruby
-  syntax for symbols, then use the +intern+ method on a string to
-  convert it to a symbol.
+  syntax for symbols, then use the :"string" form to specify a symbol.
 
-    xml_markup.declare! :ELEMENT, :chapter, "(title,para+)".intern
+  For example:
+
+    xml_markup.declare! :ELEMENT, :chapter, :"(title,para+)"
       #=>  <!ELEMENT chapter (title,para+)>
 
   Nested entity declarations are allowed.  For example:
 
     @xml_markup.declare! :DOCTYPE, :chapter do |x|
-      x.declare! :ELEMENT, :chapter, "(title,para+)".intern
-      x.declare! :ELEMENT, :title, "(#PCDATA)".intern
-      x.declare! :ELEMENT, :para, "(#PCDATA)".intern
+      x.declare! :ELEMENT, :chapter, :"(title,para+)"
+      x.declare! :ELEMENT, :title, :"(#PCDATA)"
+      x.declare! :ELEMENT, :para, :"(#PCDATA)"
     end
 
     #=>
@@ -140,23 +141,22 @@ incompatibility are:
   right form for builder (e.g. "<tt>SOAP:Envelope</tt>" =>
   "<tt>xml.SOAP :Envelope</tt>")
 
-* Attributes to tags are not escaped by default.  This allows you to
-  use entities in attrbites.  Many people do not need this facility
-  and would prefer that attributes be automatically escaped.  If you
-  _want_ escaped attributes, use the <tt>:escape_attrs</tt> option to
-  enable this.
+* String attribute values are <em>now</em> escaped by default by
+  Builder (<b>NOTE:</b> this is _new_ behavior as of version 2.0).
 
-  Default behavior:
+  However, occasionally you need to use entities in attribute values.
+  Using a symbols (rather than a string) for an attribute value will
+  cause Builder to not run its quoting/escaping algorithm on that
+  particular value.
+
+  (<b>Note:</b> The +escape_attrs+ option for builder is now
+  obsolete).
+
+  Example:
 
    xml = Builder::XmlMarkup.new
-   xml.ref(:id => "H&amp;R")
-     #=>  <ref id="H&amp;R"/>
-
-  Behavior with the <tt>:escape_attrs</tt> set to true:
-
-   xml = Builder::XmlMarkup.new(:escape_attrs=>true)
-   xml.ref(:id => "H&R")
-     #=> <ref id="H&amp;R"/>
+   xml.ref(:id => "H&amp;R", :name=>:"Ben&Jerrys")
+     #=>  <ref id="H&amp;R" name="Ben&amp;Jerrys"/>
 
 == Contact
 
