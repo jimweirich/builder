@@ -16,6 +16,9 @@ module Builder
   # depend upon <tt>method_missing</tt> (e.g. dynamic proxies).
   class BlankSlate
     class << self
+
+      # Hide the method named +name+ in the BlankSlate class.  Don't
+      # hide +instance_eval+ or any method beginning with "__".
       def hide(name)
 	undef_method name if
 	  instance_methods.include?(name.to_s) and
@@ -29,10 +32,14 @@ end
 
 # Since Ruby is very dynamic, methods added to the ancestors of
 # BlankSlate <em>after BlankSlate is defined</em> will show up in the
-# list of available BlankSlate methods.  We handle this by defining a hook in the Object and Kernel classes that will hide any defined 
+# list of available BlankSlate methods.  We handle this by defining a
+# hook in the Object and Kernel classes that will hide any defined
 module Kernel
   class << self
     alias_method :blank_slate_method_added, :method_added
+
+    # Detect method additions to Kernel and remove them in the
+    # BlankSlate class.
     def method_added(name)
       blank_slate_method_added(name)
       return if self != Kernel
@@ -44,6 +51,9 @@ end
 class Object
   class << self
     alias_method :blank_slate_method_added, :method_added
+
+    # Detect method additions to Object and remove them in the
+    # BlankSlate class.
     def method_added(name)
       blank_slate_method_added(name)
       return if self != Object
