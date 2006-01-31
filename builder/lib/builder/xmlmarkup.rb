@@ -174,16 +174,18 @@ module Builder
     #    Amount of initial indentation (specified in levels, not
     #    spaces).
     #    
-    # :escape_attrs=><em>true_or_false</em>::
-    #    If true, attributes will automatically be escaped in the
-    #    output.  If false (the default), attributes will not be
-    #    escaped.
+    # :escape_attrs=><b>OBSOLETE</em>::
+    #    The :escape_attrs option is no longer supported by builder
+    #    (and will be quietly ignored).  String attribute values are
+    #    now automatically escaped.  If you need unescaped attribute
+    #    values (perhaps you are using entities in the attribute
+    #    values), then give the value as a Symbol.  This allows much
+    #    finer control over escaping attribute values.
     #    
     def initialize(options={})
       indent = options[:indent] || 0
       margin = options[:margin] || 0
       super(indent, margin)
-      @escape_attrs = options[:escape_attrs] || false
       @target = options[:target] || ""
     end
     
@@ -306,7 +308,12 @@ module Builder
     end
 
     def _attr_value(value)
-      @escape_attrs ? _escape_quote(value) : value
+      case value
+      when Symbol
+	value.to_s
+      else
+	_escape_quote(value.to_s)
+      end
     end
 
     def _ensure_no_block(got_block)
