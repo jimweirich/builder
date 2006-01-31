@@ -44,20 +44,25 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal %{<ref id="12"/>}, @xml.target!
   end
 
-  def test_attributes_are_unquoted_by_default
-    @xml.ref(:id => "H&amp;R")
+  def test_string_attributes_are_quoted_by_default
+    @xml.ref(:id => "H&R")
+    assert_equal %{<ref id="H&amp;R"/>}, @xml.target!
+  end
+
+  def test_symbol_attributes_are_unquoted_by_default
+    @xml.ref(:id => :"H&amp;R")
     assert_equal %{<ref id="H&amp;R"/>}, @xml.target!
   end
 
   def test_attributes_quoted_can_be_turned_on
-    @xml = Builder::XmlMarkup.new(:escape_attrs => true)
+    @xml = Builder::XmlMarkup.new
     @xml.ref(:id => "<H&R \"block\">")
     assert_equal %{<ref id="&lt;H&amp;R &quot;block&quot;&gt;"/>}, @xml.target!
   end
 
   def test_mixed_attribute_quoting_with_nested_builders
-    x = Builder::XmlMarkup.new(:escape_attrs=>true, :target=>@xml)
-    @xml.ref(:id=>"H&amp;R") {
+    x = Builder::XmlMarkup.new(:target=>@xml)
+    @xml.ref(:id=>:"H&amp;R") {
       x.element(:tag=>"Long&Short")
     }
     assert_equal "<ref id=\"H&amp;R\"><element tag=\"Long&amp;Short\"/></ref>",
@@ -126,7 +131,7 @@ class TestMarkup < Test::Unit::TestCase
   end
 
   def test_non_escaping
-    @xml.div("ns:xml"=>"&xml;") { |x| x << "<h&i>"; x.em("H&R Block") }
+    @xml.div("ns:xml"=>:"&xml;") { |x| x << "<h&i>"; x.em("H&R Block") }
     assert_equal %{<div ns:xml="&xml;"><h&i><em>H&amp;R Block</em></div>}, @xml.target!
   end
 
@@ -149,7 +154,7 @@ end
 class TestAttributeEscaping < Test::Unit::TestCase
 
   def setup
-    @xml = Builder::XmlMarkup.new(:escape_attrs => true)
+    @xml = Builder::XmlMarkup.new
   end
 
   def test_element_gt
@@ -198,11 +203,11 @@ class TestNameSpaces < Test::Unit::TestCase
     xml = Builder::XmlMarkup.new(:indent=>2)
     xml.instruct!
     xml.rdf :RDF, 
-      "xmlns:rdf" => "&rdf;",
-      "xmlns:rdfs" => "&rdfs;",
-      "xmlns:xsd" => "&xsd;",
-      "xmlns:owl" => "&owl;" do
-      xml.owl :Class, 'rdf:ID'=>'Bird' do
+      "xmlns:rdf" => :"&rdf;",
+      "xmlns:rdfs" => :"&rdfs;",
+      "xmlns:xsd" => :"&xsd;",
+      "xmlns:owl" => :"&owl;" do
+      xml.owl :Class, :'rdf:ID'=>'Bird' do
 	xml.rdfs :label, 'bird'
 	xml.rdfs :subClassOf do
 	  xml.owl :Restriction do
