@@ -41,6 +41,37 @@ or
 
 == Compatibility
 
+=== Version 2.0.0 Compatibility Changes
+
+Version 2.0.0 introduces automatically escaped attribute values for
+the first time.  Versions prior to 2.0.0 did not insert escape
+characters into attribute values in the XML markup.  This allowed
+attribute values to explicitly reference entities, which was
+occasionally used by a small number of developers.  Since strings
+could always be explicitly escaped by hand, this was not a major
+restriction in functionality.
+
+However, it did suprise most users of builder.  Since the body text is
+normally escaped, everybody expected the attribute values to be
+escaped as well.  Escaped attribute values were the number one support
+request on the 1.x Builder series.
+
+Starting with Builder version 2.0.0, all attribute values expressed as
+strings will be processed and the appropriate characters will be
+escaped (e.g. "&" will be tranlated to "&amp;").  Attribute values
+that are expressed as Symbol values will not be processed for escaped
+characters and will be unchanged in output. (Yes, this probably counts
+as Symbol abuse, but the convention is convenient and flexible).
+
+Example:
+
+  xml = Builder::XmlMarkup.new
+  xml.sample(:escaped=>"This&That", :unescaped=>:"Here&amp;There")
+  xml.target!  =>
+    <sample escaped="This&amp;That" unescaped="Here&amp;There"/>
+
+=== Version 1.0.0 Compatibility Changes
+
 Version 1.0.0 introduces some changes that are not backwards
 compatible with earlier releases of builder.  The main areas of
 incompatibility are:
@@ -154,9 +185,22 @@ incompatibility are:
 
   Example:
 
-   xml = Builder::XmlMarkup.new
-   xml.ref(:id => "H&amp;R", :name=>:"Ben&Jerrys")
-     #=>  <ref id="H&amp;R" name="Ben&amp;Jerrys"/>
+    xml = Builder::XmlMarkup.new
+    xml.sample(:escaped=>"This&That", :unescaped=>:"Here&amp;There")
+    xml.target!  =>
+      <sample escaped="This&amp;That" unescaped="Here&amp;There"/>
+
+* UTF-8 Support
+
+  Builder correctly translates UTF-8 characters into valid XML.  (New
+  in version 2.0.0).  Thanks to Sam Ruby for the translation code.
+
+  Example:
+
+    xml = Builder::Markup.new
+    xml.sample("Iñtërnâtiônàl")
+    xml.target!  =>
+      "<sample>I&#241;t&#235;rn&#226;ti&#244;n&#224;l</sample>"
 
 == Contact
 
