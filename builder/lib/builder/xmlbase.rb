@@ -13,7 +13,7 @@ module Builder
 
     # Create an XML markup builder.
     #
-    # out::     Object receiving the markup.1  +out+ must respond to
+    # out::     Object receiving the markup.  +out+ must respond to
     #           <tt><<</tt>.
     # indent::  Number of spaces used for indentation (0 implies no
     #           indentation and no line breaks).
@@ -111,15 +111,13 @@ module Builder
 
     private
     
+    require 'builder/xchar'
     def _escape(text)
-      text.
-	gsub(%r{&}, '&amp;').
-	gsub(%r{<}, '&lt;').
-	gsub(%r{>}, '&gt;')
+      text.to_xs
     end
 
     def _escape_quote(text)
-      _escape(text).gsub(%r{"}, '&quot;')
+      _escape(text).gsub(%r{"}, '&quot;')  # " WART
     end
 
     def _capture_outer_self(block)
