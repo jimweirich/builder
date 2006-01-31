@@ -1,6 +1,6 @@
 # Rakefile for rake        -*- ruby -*-
 
-# Copyright 2004 by Jim Weirich (jim@weirichhouse.org).
+# Copyright 2004, 2005, 2006 by Jim Weirich (jim@weirichhouse.org).
 # All rights reserved.
 
 # Permission is granted for use, copying, modification, distribution,
@@ -17,7 +17,7 @@ rescue Exception
   nil
 end
 
-PKG_VERSION = "1.2.4"
+PKG_VERSION = "1.99.0.1"
 
 SRC_RB = FileList['lib/**/*.rb']
 
@@ -33,7 +33,7 @@ task :tu => [:test]
 
 Rake::TestTask.new do |t|
   t.test_files = FileList['test/test*.rb']
-  t.verbose = true
+  t.verbose = false
 end
 
 # Create a task to build the RDOC documentation tree.
@@ -43,7 +43,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README'
   rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*')
-  rdoc.template = 'jamis'
+  rdoc.template = 'doc/jamis.rb'
 }
 
 # ====================================================================
