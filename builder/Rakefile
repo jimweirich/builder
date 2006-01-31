@@ -42,7 +42,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
   rdoc.rdoc_dir = 'html'
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README'
-  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*')
+  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc')
   rdoc.template = 'doc/jamis.rb'
 }
 
@@ -93,7 +93,9 @@ EOS
     s.homepage = "http://onestepback.org"
   end
 
-  Rake::GemPackageTask.new(spec) do  end
+    Rake::GemPackageTask.new(spec) do |t|
+      t.need_tar = true
+    end
 end
 
 desc "Look for Debugging print lines"
