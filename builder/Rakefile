@@ -12,7 +12,7 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 begin
   require 'rubygems'
-  require 'rake/xgempackagetask'
+  require 'rake/gempackagetask'
 rescue Exception
   nil
 end
@@ -83,12 +83,10 @@ simple to do.  Currently the following builder objects are supported:
 EOS
 
     s.files = PKG_FILES.to_a
-      puts "DBG: IN SPEC: #{s.files}"
-
     s.require_path = 'lib'
     s.autorequire = 'builder'
 
-    s.test_files = PKG_FILES.select { |fn| fn =~ /^test\// }
+    s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
 
     s.has_rdoc = true
     s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
