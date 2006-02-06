@@ -19,7 +19,7 @@ Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
 == Usage
 
   require 'rubygems'	
-  require_gem 'builder', '~> 1.2'
+  require_gem 'builder', '~> 2.0'
 
   builder = Builder::XmlMarkup.new
   xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
