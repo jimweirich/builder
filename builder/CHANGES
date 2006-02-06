@@ -1,6 +1,6 @@
 = Change Log
 
-== Pre-Version 2.0.0
+== Version 2.0.0
 
 * Added doc directory
 * Added unit tests for XmlEvents.
