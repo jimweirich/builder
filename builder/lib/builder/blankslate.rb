@@ -41,9 +41,10 @@ module Kernel
     # Detect method additions to Kernel and remove them in the
     # BlankSlate class.
     def method_added(name)
-      blank_slate_method_added(name)
-      return if self != Kernel
+      result = blank_slate_method_added(name)
+      return result if self != Kernel
       Builder::BlankSlate.hide(name)
+      result
     end
   end
 end
@@ -55,9 +56,24 @@ class Object
     # Detect method additions to Object and remove them in the
     # BlankSlate class.
     def method_added(name)
-      blank_slate_method_added(name)
-      return if self != Object
+      result = blank_slate_method_added(name)
+      return result if self != Object
       Builder::BlankSlate.hide(name)
+      result
     end
   end
 end
+
+
+class Module
+  alias blankslate_original_append_features append_features
+  def append_features(mod)
+    result = blankslate_original_append_features(mod)
+    return result if mod != Object
+    instance_methods.each do |name|
+      Builder::BlankSlate.hide(name)
+    end
+    result
+  end
+end
+
