@@ -1,5 +1,12 @@
 = Change Log
 
+== Version 2.1.0
+
+* Fixed bug in BlankSlate where including a module into Object could
+  cause methods to leak into BlankSlate.
+* Made BlankSlate available as its own gem.  Currently the builder gem
+  still directly includes the BlankSlate code.
+
 == Version 2.0.0
 
 * Added doc directory
