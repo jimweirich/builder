@@ -50,7 +50,7 @@ end
 
 class TestBlankSlate < Test::Unit::TestCase
   def setup
-    @bs = Builder::BlankSlate.new
+    @bs = BlankSlate.new
   end
   
   def test_create
