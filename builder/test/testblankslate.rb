@@ -4,6 +4,7 @@ require 'test/unit'
 require 'test/preload'
 require 'builder/blankslate'
 
+# Methods to be introduced into the Object class late.
 module LateObject
   def late_object
     33
@@ -14,6 +15,7 @@ module LateObject
   end
 end
 
+# Methods to be introduced into the Kernel module late.
 module LateKernel
   def late_kernel
     44
@@ -24,6 +26,8 @@ module LateKernel
   end
 end
 
+# Introduce some late methods (both module and direct) into the Kernel
+# module.
 module Kernel
   include LateKernel
 
@@ -41,6 +45,8 @@ module Kernel
 end
 
 
+# Introduce some late methods (both module and direct) into the Object
+# class.
 class Object 
   include LateObject
   def another_late_addition
@@ -48,6 +54,10 @@ class Object
   end
 end
 
+
+######################################################################
+# Test case for blank slate.
+#
 class TestBlankSlate < Test::Unit::TestCase
   def setup
     @bs = BlankSlate.new
@@ -89,6 +99,29 @@ class TestBlankSlate < Test::Unit::TestCase
 
   def test_late_included_module_in_kernel_is_ok
     assert_raise(NoMethodError) { @bs.late_kernel }
+  end
+
+  def test_revealing_previously_hidden_methods_is_ok
+    with_to_s = Class.new(BlankSlate) do
+      reveal :to_s
+    end
+    assert_match /^#<.*>$/, with_to_s.new.to_s
+  end
+
+  def test_revealing_a_hidden_method_twice_is_ok
+    with_to_s = Class.new(BlankSlate) do
+      reveal :to_s
+      reveal :to_s
+    end
+    assert_match /^#<.*>$/, with_to_s.new.to_s
+  end
+
+  def test_revealing_unknown_hidden_method_is_an_error
+    assert_raises(RuntimeError) do
+      Class.new(BlankSlate) do
+	reveal :xyz
+      end
+    end
   end
 end
 
