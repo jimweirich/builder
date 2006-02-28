@@ -6,6 +6,7 @@
   cause methods to leak into BlankSlate.
 * Made BlankSlate available as its own gem.  Currently the builder gem
   still directly includes the BlankSlate code.
+* Added reveal capability to BlankSlate.
 
 == Version 2.0.0
 
