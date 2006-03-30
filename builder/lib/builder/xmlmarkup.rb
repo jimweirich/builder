@@ -211,7 +211,7 @@ module Builder
       args.each do |arg|
 	case arg
 	when String
-	  @target << %{ "#{arg}"}
+	  @target << %{ "#{arg}"} # " WART
 	when Symbol
 	  @target << " #{arg}"
 	end
@@ -300,10 +300,10 @@ module Builder
       return if attrs.nil?
       order.each do |k|
 	v = attrs[k]
-	@target << %{ #{k}="#{_attr_value(v)}"} if v
+	@target << %{ #{k}="#{_attr_value(v)}"} if v # " WART
       end
       attrs.each do |k, v|
-	@target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k)
+	@target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k) # " WART
       end
     end
 
