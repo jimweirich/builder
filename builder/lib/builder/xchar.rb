@@ -73,7 +73,7 @@ module Builder
 
     # See http://www.w3.org/TR/REC-xml/#charsets for details.
     VALID = [
-      [0x9, 0xA, 0xD],
+      0x9, 0xA, 0xD,
       (0x20..0xD7FF), 
       (0xE000..0xFFFD),
       (0x10000..0x10FFFF)
@@ -92,8 +92,11 @@ class Fixnum
   # XML escaped version of chr
   def xchr
     n = XChar::CP1252[self] || self
-    n = 42 unless XChar::VALID.find {|range| range.include? n}
-    XChar::PREDEFINED[n] or (n<128 ? n.chr : "&##{n};")
+    case n when *XChar::VALID
+      XChar::PREDEFINED[n] or (n<128 ? n.chr : "&##{n};")
+    else
+      '*'
+    end
   end
 end
 
