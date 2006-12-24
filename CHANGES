@@ -4,6 +4,7 @@
 
 * Fixed typo in XmlMarkup class docs (ident => indent). (from Martin
   Fowler).
+* Removed extra directory indirection from legacy CVS to SVN move.
 
 == Version 2.1.0
 
