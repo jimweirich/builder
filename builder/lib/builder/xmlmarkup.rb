@@ -117,7 +117,7 @@ module Builder
   #
   #   Example:
   #
-  #     xm = Builder.new(:ident=>2)
+  #     xm = Builder.new(:indent=>2)
   #     # xm will produce nicely formatted and indented XML.
   #  
   #     xm = Builder.new(:indent=>2, :margin=>4)
