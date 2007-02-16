@@ -52,7 +52,6 @@ module Builder
         unless text.nil?
           raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
         end
-        _capture_outer_self(block) if @self.nil?
         _indent
         _start_tag(sym, attrs)
         _newline
@@ -120,10 +119,6 @@ module Builder
       _escape(text).gsub(%r{"}, '&quot;')  # " WART
     end
 
-    def _capture_outer_self(block)
-      @self = eval("self", block)
-    end
-    
     def _newline
       return if @indent == 0
       text! "\n"

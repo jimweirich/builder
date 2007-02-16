@@ -8,6 +8,8 @@
 * Removed some extraneous tabs from source.
 * Fixed test on private methods in blankslate to differentiate between
   targetted and untargetted private methods.
+* Removed legacy capture of @self in XmlBase (@self was used back when
+  we used instance eval).
 
 == Version 2.1.0
 
