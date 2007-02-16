@@ -21,10 +21,10 @@ class BlankSlate
     # hide +instance_eval+ or any method beginning with "__".
     def hide(name)
       if instance_methods.include?(name.to_s) and
-	  name !~ /^(__|instance_eval)/
-	@hidden_methods ||= {}
-	@hidden_methods[name.to_sym] = instance_method(name)
-	undef_method name
+        name !~ /^(__|instance_eval)/
+        @hidden_methods ||= {}
+        @hidden_methods[name.to_sym] = instance_method(name)
+        undef_method name
       end
     end
 
@@ -38,8 +38,8 @@ class BlankSlate
       unbound_method = find_hidden_method(name)
       fail "Don't know how to reveal method '#{name}'" unless unbound_method
       define_method(name) do |*args|
-	bound_method ||= unbound_method.bind(self)
-	bound_method.call(*args)
+        bound_method ||= unbound_method.bind(self)
+        bound_method.call(*args)
       end
     end
   end
@@ -109,4 +109,3 @@ class Module
     result
   end
 end
-

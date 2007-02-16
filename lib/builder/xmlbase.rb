@@ -39,37 +39,37 @@ module Builder
       attrs = nil
       sym = "#{sym}:#{args.shift}" if args.first.kind_of?(Symbol)
       args.each do |arg|
-	case arg
-	when Hash
-	  attrs ||= {}
-	  attrs.merge!(arg)
-	else
-	  text ||= ''
-	  text << arg.to_s
-	end
+        case arg
+        when Hash
+          attrs ||= {}
+          attrs.merge!(arg)
+        else
+          text ||= ''
+          text << arg.to_s
+        end
       end
       if block
-	unless text.nil?
-	  raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
-	end
-	_capture_outer_self(block) if @self.nil?
-	_indent
-	_start_tag(sym, attrs)
-	_newline
-	_nested_structures(block)
-	_indent
-	_end_tag(sym)
-	_newline
+        unless text.nil?
+          raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
+        end
+        _capture_outer_self(block) if @self.nil?
+        _indent
+        _start_tag(sym, attrs)
+        _newline
+        _nested_structures(block)
+        _indent
+        _end_tag(sym)
+        _newline
       elsif text.nil?
-	_indent
-	_start_tag(sym, attrs, true)
-	_newline
+        _indent
+        _start_tag(sym, attrs, true)
+        _newline
       else
-	_indent
-	_start_tag(sym, attrs)
-	text! text
-	_end_tag(sym)
-	_newline
+        _indent
+        _start_tag(sym, attrs)
+        text! text
+        _end_tag(sym)
+        _newline
       end
       @target
     end

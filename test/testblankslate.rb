@@ -62,16 +62,46 @@ class TestBlankSlate < Test::Unit::TestCase
   def setup
     @bs = BlankSlate.new
   end
-  
-  def test_create
-    assert nil != @bs
-  end
 
   def test_undefined_methods_remain_undefined
     assert_raise(NoMethodError) { @bs.no_such_method }
     assert_raise(NoMethodError) { @bs.nil? }
   end
 
+
+  # NOTE: NameError is acceptable because the lack of a '.' means that
+  # Ruby can't tell if it is a method or a local variable.
+  def test_undefined_methods_remain_undefined_during_instance_eval
+    assert_raise(NoMethodError, NameError)  do
+      @bs.instance_eval do nil? end
+    end
+    assert_raise(NoMethodError, NameError)  do
+      @bs.instance_eval do no_such_method end
+    end
+  end
+
+  def test_private_methods_are_undefined
+    assert_raise(NoMethodError) do
+      @bs.puts "HI"
+    end
+  end
+  
+  def test_targetted_private_methods_are_undefined_during_instance_eval
+    assert_raise(NoMethodError, NameError) do
+      @bs.instance_eval do self.puts "HI" end
+    end
+  end
+  
+  def test_untargetted_private_methods_are_defined_during_instance_eval
+    oldstdout = $stdout
+    $stdout = StringIO.new
+    @bs.instance_eval do 
+      puts "HI"
+    end
+  ensure
+    $stdout = oldstdout
+  end
+  
   def test_methods_added_late_to_kernel_remain_undefined
     assert_equal 1234, nil.late_addition
     assert_raise(NoMethodError) { @bs.late_addition }
@@ -119,7 +149,7 @@ class TestBlankSlate < Test::Unit::TestCase
   def test_revealing_unknown_hidden_method_is_an_error
     assert_raises(RuntimeError) do
       Class.new(BlankSlate) do
-	reveal :xyz
+        reveal :xyz
       end
     end
   end

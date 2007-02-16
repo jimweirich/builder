@@ -209,18 +209,18 @@ module Builder
       _indent
       @target << "<!#{inst}"
       args.each do |arg|
-	case arg
-	when String
-	  @target << %{ "#{arg}"} # " WART
-	when Symbol
-	  @target << " #{arg}"
-	end
+        case arg
+        when String
+          @target << %{ "#{arg}"} # " WART
+        when Symbol
+          @target << " #{arg}"
+        end
       end
       if block_given?
-	@target << " ["
-	_newline
-	_nested_structures(block)
-	@target << "]"
+        @target << " ["
+        _newline
+        _nested_structures(block)
+        @target << "]"
       end
       @target << ">"
       _newline
@@ -238,15 +238,15 @@ module Builder
     def instruct!(directive_tag=:xml, attrs={})
       _ensure_no_block block_given?
       if directive_tag == :xml
-	a = { :version=>"1.0", :encoding=>"UTF-8" }
-	attrs = a.merge attrs
+        a = { :version=>"1.0", :encoding=>"UTF-8" }
+        attrs = a.merge attrs
       end
       _special(
-	"<?#{directive_tag}",
-	"?>",
-	nil,
-	attrs,
-	[:version, :encoding, :standalone])
+      "<?#{directive_tag}",
+      "?>",
+      nil,
+      attrs,
+      [:version, :encoding, :standalone])
     end
 
     # Insert a CDATA section into the XML markup.
@@ -299,27 +299,27 @@ module Builder
     def _insert_attributes(attrs, order=[])
       return if attrs.nil?
       order.each do |k|
-	v = attrs[k]
-	@target << %{ #{k}="#{_attr_value(v)}"} if v # " WART
+        v = attrs[k]
+        @target << %{ #{k}="#{_attr_value(v)}"} if v # " WART
       end
       attrs.each do |k, v|
-	@target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k) # " WART
+        @target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k) # " WART
       end
     end
 
     def _attr_value(value)
       case value
       when Symbol
-	value.to_s
+        value.to_s
       else
-	_escape_quote(value.to_s)
+        _escape_quote(value.to_s)
       end
     end
 
     def _ensure_no_block(got_block)
       if got_block
-	fail IllegalBlockError,
-	  "Blocks are not allowed on XML instructions"
+        fail IllegalBlockError,
+        "Blocks are not allowed on XML instructions"
       end
     end
 

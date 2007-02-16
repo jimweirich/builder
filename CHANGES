@@ -5,6 +5,9 @@
 * Fixed typo in XmlMarkup class docs (ident => indent). (from Martin
   Fowler).
 * Removed extra directory indirection from legacy CVS to SVN move.
+* Removed some extraneous tabs from source.
+* Fixed test on private methods in blankslate to differentiate between
+  targetted and untargetted private methods.
 
 == Version 2.1.0
 
