@@ -10,6 +10,7 @@
   targetted and untargetted private methods.
 * Removed legacy capture of @self in XmlBase (@self was used back when
   we used instance eval).
+* Added additional tests for global functions (both direct and included).
 
 == Version 2.1.0
 

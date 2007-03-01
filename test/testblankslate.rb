@@ -54,6 +54,17 @@ class Object
   end
 end
 
+# Introduce some late methods by inclusion.
+module GlobalModule
+ def global_inclusion
+   42
+ end
+end
+include GlobalModule
+
+def direct_global
+  43
+end
 
 ######################################################################
 # Test case for blank slate.
@@ -111,6 +122,11 @@ class TestBlankSlate < Test::Unit::TestCase
     assert_equal 4321, nil.another_late_addition
     assert_raise(NoMethodError) { @bs.another_late_addition }
   end
+  
+  def test_methods_added_late_to_global_remain_undefined
+    assert_equal 42, global_inclusion
+    assert_raise(NoMethodError) { @bs.global_inclusion }
+  end
 
   def test_preload_method_added
     assert Kernel.k_added_names.include?(:late_addition)
@@ -151,6 +167,15 @@ class TestBlankSlate < Test::Unit::TestCase
       Class.new(BlankSlate) do
         reveal :xyz
       end
+    end
+  end
+
+  def test_global_includes_still_work
+    assert_nothing_raised do
+      assert_equal 42, global_inclusion
+      assert_equal 42, Object.new.global_inclusion
+      assert_equal 42, "magic number".global_inclusion
+      assert_equal 43, direct_global
     end
   end
 end
