@@ -21,7 +21,7 @@ end
 
 CLOBBER.include('pkg')
 
-CURRENT_VERSION = '2.0.1.1'
+CURRENT_VERSION = '2.0.2'
 PKG_VERSION = ENV['REL'] ? ENV['REL'] : CURRENT_VERSION
 
 SRC_RB = FileList['lib/**/*.rb']
