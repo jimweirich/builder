@@ -3,6 +3,7 @@
 require 'test/unit'
 require 'test/preload'
 require 'builder/blankslate'
+require 'stringio'
 
 # Methods to be introduced into the Object class late.
 module LateObject
