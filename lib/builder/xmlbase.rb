@@ -28,7 +28,7 @@ module Builder
     # is the tag name, the arguements are the same as the tags
     # implemented via <tt>method_missing</tt>.
     def tag!(sym, *args, &block)
-      self.__send__(sym, *args, &block)
+      method_missing(sym.to_sym, *args, &block)
     end
 
     # Create XML markup based on the name of the method.  This method

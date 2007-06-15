@@ -33,6 +33,8 @@ class BlankSlate
       @hidden_methods[name] || superclass.find_hidden_method(name)
     end
 
+    # Redefine a previously hidden method so that it may be called on a blank
+    # slate object.
     def reveal(name)
       bound_method = nil
       unbound_method = find_hidden_method(name)

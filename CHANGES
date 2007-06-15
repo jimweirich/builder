@@ -1,5 +1,12 @@
 = Change Log
 
+== Version 2.1.2
+
+* Fixed bug where private methods in kernel could leak through using
+  tag!().  Thanks to Hagen Overdick for finding and diagnosing this
+  bug.
+
+
 == Version 2.1.1
 
 * Fixed typo in XmlMarkup class docs (ident => indent). (from Martin

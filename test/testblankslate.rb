@@ -148,7 +148,7 @@ class TestBlankSlate < Test::Unit::TestCase
     assert_raise(NoMethodError) { @bs.late_kernel }
   end
 
-  def test_revealing_previously_hidden_methods_is_ok
+  def test_revealing_previously_hidden_methods_are_callable
     with_to_s = Class.new(BlankSlate) do
       reveal :to_s
     end

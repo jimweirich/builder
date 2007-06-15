@@ -91,6 +91,11 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal %{<non-ruby-token id="1"><ok/></non-ruby-token>}, @xml.target!
   end
 
+  def test_tag_can_handle_private_method
+    @xml.tag!("loop", :id=>1) { |x| x.ok }
+    assert_equal %{<loop id="1"><ok/></loop>}, @xml.target!
+  end
+
   def test_no_explicit_marker
     @xml.p { |x| x.b("HI") }
     assert_equal "<p><b>HI</b></p>", @xml.target!
@@ -441,3 +446,4 @@ class TestIndentedXmlMarkup < Test::Unit::TestCase
   end
 
 end
+
