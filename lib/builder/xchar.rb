@@ -10,7 +10,7 @@
 
 module Builder
   def self.check_for_name_collision(klass, method_name, defined_constant=nil)
-    if klass.instance_methods.include?(method_name)
+    if klass.instance_methods.include?(method_name.to_s)
       fail RuntimeError,
 	"Name Collision: Method '#{method_name}' is already defined in #{klass}"
     end

@@ -25,7 +25,7 @@ module Builder
     end
     
     # Create a tag named +sym+.  Other than the first argument which
-    # is the tag name, the arguements are the same as the tags
+    # is the tag name, the arguments are the same as the tags
     # implemented via <tt>method_missing</tt>.
     def tag!(sym, *args, &block)
       method_missing(sym.to_sym, *args, &block)
@@ -74,7 +74,7 @@ module Builder
     end
 
     # Append text to the output target.  Escape any markup.  May be
-    # used within the markup brakets as:
+    # used within the markup brackets as:
     #
     #   builder.p { |b| b.br; b.text! "HI" }   #=>  <p><br/>HI</p>
     def text!(text)
@@ -82,7 +82,7 @@ module Builder
     end
     
     # Append text to the output target without escaping any markup.
-    # May be used within the markup brakets as:
+    # May be used within the markup brackets as:
     #
     #   builder.p { |x| x << "<br/>HI" }   #=>  <p><br/>HI</p>
     #

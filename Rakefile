@@ -158,6 +158,40 @@ task :dbg do
   FileList['**/*.rb'].egrep /\bDBG|\bbreakpoint\b/
 end
   
+
+# RCov ---------------------------------------------------------------
+begin
+  require 'rcov/rcovtask'
+
+  Rcov::RcovTask.new do |t|
+    t.libs << "test"
+    t.rcov_opts = [
+      '-xRakefile', '--text-report'
+    ]
+    t.test_files = FileList[
+      'test/test*.rb'
+    ]
+    t.output_dir = 'coverage'
+    t.verbose = true
+  end
+rescue LoadError
+  # No rcov available
+end
+
+# Tags file ----------------------------------------------------------
+
+namespace "tags" do
+  desc "Create a TAGS file"
+  task :emacs => "TAGS"
+  
+  TAGS = 'xctags -e'
+  
+  file "TAGS" => SRC_RB do
+    puts "Makings TAGS"
+    sh "#{TAGS} #{SRC_RB}", :verbose => false
+  end
+end
+  
 # --------------------------------------------------------------------
 # Creating a release
 
