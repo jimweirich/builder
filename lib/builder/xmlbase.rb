@@ -13,15 +13,18 @@ module Builder
 
     # Create an XML markup builder.
     #
-    # out::     Object receiving the markup.  +out+ must respond to
-    #           <tt><<</tt>.
-    # indent::  Number of spaces used for indentation (0 implies no
-    #           indentation and no line breaks).
-    # initial:: Level of initial indentation.
-    #
-    def initialize(indent=0, initial=0)
+    # out::      Object receiving the markup.  +out+ must respond to
+    #            <tt><<</tt>.
+    # indent::   Number of spaces used for indentation (0 implies no
+    #            indentation and no line breaks).
+    # initial::  Level of initial indentation.
+    # encoding:: When <tt>encoding</tt> and $KCODE are set to 'utf-8'
+    #            characters aren't converted to character entities in
+    #            the output stream.
+    def initialize(indent=0, initial=0, encoding='utf-8')
       @indent = indent
       @level  = initial
+      @encoding = encoding.downcase
     end
     
     # Create a tag named +sym+.  Other than the first argument which
@@ -112,7 +115,7 @@ module Builder
     
     require 'builder/xchar'
     def _escape(text)
-      text.to_xs
+      text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
     end
 
     def _escape_quote(text)

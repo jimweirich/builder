@@ -89,11 +89,13 @@ end
 class Fixnum
   XChar = Builder::XChar if ! defined?(XChar)
 
-  # XML escaped version of chr
-  def xchr
+  # XML escaped version of chr. When <tt>escape</tt> is set to false
+  # the CP1252 fix is still applied but utf-8 characters are not
+  # converted to character entities.
+  def xchr(escape=true)
     n = XChar::CP1252[self] || self
     case n when *XChar::VALID
-      XChar::PREDEFINED[n] or (n<128 ? n.chr : "&##{n};")
+      XChar::PREDEFINED[n] or (n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*')))
     else
       '*'
     end
@@ -106,9 +108,11 @@ end
 # to_s.
 #
 class String
-  # XML escaped version of to_s
-  def to_xs
-    unpack('U*').map {|n| n.xchr}.join # ASCII, UTF-8
+  # XML escaped version of to_s. When <tt>escape</tt> is set to false
+  # the CP1252 fix is still applied but utf-8 characters are not
+  # converted to character entities.
+  def to_xs(escape=true)
+    unpack('U*').map {|n| n.xchr(escape)}.join # ASCII, UTF-8
   rescue
     unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
   end

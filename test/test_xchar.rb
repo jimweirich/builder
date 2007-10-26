@@ -34,4 +34,11 @@ class TestXmlEscaping < Test::Unit::TestCase
     assert_equal '&#8217;', "\xE2\x80\x99".to_xs # right single quote
     assert_equal '&#169;',  "\xC2\xA9".to_xs     # copy
   end
+ 
+  def test_utf8_verbatim
+    assert_equal "\xE2\x80\x99", "\xE2\x80\x99".to_xs(false)  # right single quote
+    assert_equal "\xC2\xA9",  "\xC2\xA9".to_xs(false)         # copy
+    assert_equal "\xC2\xA9&amp;\xC2\xA9",
+      "\xC2\xA9&\xC2\xA9".to_xs(false)                        # copy with ampersand
+  end
 end

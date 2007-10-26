@@ -240,13 +240,14 @@ module Builder
       if directive_tag == :xml
         a = { :version=>"1.0", :encoding=>"UTF-8" }
         attrs = a.merge attrs
+	@encoding = attrs[:encoding].downcase
       end
       _special(
-      "<?#{directive_tag}",
-      "?>",
-      nil,
-      attrs,
-      [:version, :encoding, :standalone])
+        "<?#{directive_tag}",
+        "?>",
+        nil,
+        attrs,
+        [:version, :encoding, :standalone])
     end
 
     # Insert a CDATA section into the XML markup.

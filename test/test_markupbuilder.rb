@@ -377,6 +377,62 @@ class TestIndentedXmlMarkup < Test::Unit::TestCase
     assert_equal "        <name>\n          <first>Jim</first>\n        </name>\n", @xml.target!
   end
 
+  class TestUtfMarkup < Test::Unit::TestCase
+    def setup
+      @old_kcode = $KCODE
+    end
+
+    def teardown
+      $KCODE = @old_kcode
+    end
+
+    def test_use_entities_if_no_encoding_is_given_and_kcode_is_none
+      $KCODE = 'NONE'
+      xml = Builder::XmlMarkup.new
+      xml.p("\xE2\x80\x99")
+      assert_match(%r(<p>&#8217;</p>), xml.target!) #
+    end
+
+    def test_use_entities_if_encoding_is_utf_but_kcode_is_not
+      $KCODE = 'NONE'
+      xml = Builder::XmlMarkup.new
+      xml.instruct!(:xml, :encoding => 'UTF-8')
+      xml.p("\xE2\x80\x99")
+      assert_match(%r(<p>&#8217;</p>), xml.target!) #
+    end
+
+    def test_use_entities_if_kcode_is_utf_but_encoding_is_something_else
+      $KCODE = 'UTF8'
+      xml = Builder::XmlMarkup.new
+      xml.instruct!(:xml, :encoding => 'UTF-16')
+      xml.p("\xE2\x80\x99")
+      assert_match(%r(<p>&#8217;</p>), xml.target!) #
+    end
+
+    def test_use_utf8_if_encoding_defaults_and_kcode_is_utf8
+      $KCODE = 'UTF8'
+      xml = Builder::XmlMarkup.new
+      xml.p("\xE2\x80\x99")
+      assert_equal "<p>\xE2\x80\x99</p>", xml.target!
+    end
+
+    def test_use_utf8_if_both_encoding_and_kcode_are_utf8
+      $KCODE = 'UTF8'
+      xml = Builder::XmlMarkup.new
+      xml.instruct!(:xml, :encoding => 'UTF-8')
+      xml.p("\xE2\x80\x99")
+      assert_match(%r(<p>\xE2\x80\x99</p>), xml.target!)
+    end
+
+    def test_use_utf8_if_both_encoding_and_kcode_are_utf8_with_lowercase
+      $KCODE = 'UTF8'
+      xml = Builder::XmlMarkup.new
+      xml.instruct!(:xml, :encoding => 'utf-8')
+      xml.p("\xE2\x80\x99")
+      assert_match(%r(<p>\xE2\x80\x99</p>), xml.target!)
+    end
+  end
+
   class TestXmlEvents < Test::Unit::TestCase
     def setup
       @handler = EventHandler.new
