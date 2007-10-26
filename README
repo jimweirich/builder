@@ -126,6 +126,10 @@ incompatibility are:
   <b>version</b>:: 1.0
   <b>encoding</b>:: "UTF-8"
 
+  (NOTE: if the encoding is set to "UTF-8" and $KCODE is set to
+  "UTF8", then Builder will emit UTF-8 encoded strings rather than
+  encoding non-ASCII characters as entities.)
+
 * XML entity declarations are now supported to a small degree.
 
     xml_markup.declare! :DOCTYPE, :chapter, :SYSTEM, "../dtds/chapter.dtd"
@@ -201,6 +205,17 @@ incompatibility are:
     xml.sample("Iñtërnâtiônàl")
     xml.target!  =>
       "<sample>I&#241;t&#235;rn&#226;ti&#244;n&#224;l</sample>"
+
+  You can get UTF-8 encoded output by making sure that the XML
+  encoding is set to "UTF-8" and that the $KCODE variable is set to
+  "UTF8".
+
+    $KCODE = 'UTF8'
+    xml = Builder::Markup.new
+    xml.instruct!(:xml, :encoding => "UTF-8")
+    xml.sample("Iñtërnâtiônàl")
+    xml.target!  =>
+      "<sample>Iñtërnâtiônàl</sample>"
 
 == Contact
 

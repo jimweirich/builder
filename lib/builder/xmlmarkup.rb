@@ -235,6 +235,9 @@ module Builder
     #    xml.instruct! :aaa, :bbb=>"ccc"
     #        #=> <?aaa bbb="ccc"?>
     #
+    # Note: If the encoding is setup to "UTF-8" and the value of
+    # $KCODE is "UTF8", then builder will emit UTF-8 encoded strings
+    # rather than the entity encoding normally used.
     def instruct!(directive_tag=:xml, attrs={})
       _ensure_no_block block_given?
       if directive_tag == :xml
