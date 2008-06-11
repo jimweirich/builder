@@ -21,7 +21,6 @@ class TestMarkup < Test::Unit::TestCase
   end
 
   def test_create
-    fail "OOPS"
     assert_not_nil @xml
   end
 
