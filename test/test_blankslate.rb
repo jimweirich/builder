@@ -155,6 +155,19 @@ class TestBlankSlate < Test::Unit::TestCase
     assert_match /^#<.*>$/, with_to_s.new.to_s
   end
 
+  def test_revealing_previously_hidden_methods_are_callable_with_block
+    Object.class_eval <<-EOS
+      def given_block(&block)
+        block
+      end   
+    EOS
+  
+    with_given_block = Class.new(BlankSlate) do
+      reveal :given_block
+    end
+    assert_not_nil with_given_block.new.given_block {}
+  end
+
   def test_revealing_a_hidden_method_twice_is_ok
     with_to_s = Class.new(BlankSlate) do
       reveal :to_s
