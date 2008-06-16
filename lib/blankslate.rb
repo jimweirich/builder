@@ -36,13 +36,9 @@ class BlankSlate
     # Redefine a previously hidden method so that it may be called on a blank
     # slate object.
     def reveal(name)
-      bound_method = nil
-      unbound_method = find_hidden_method(name)
-      fail "Don't know how to reveal method '#{name}'" unless unbound_method
-      define_method(name) do |*args|
-        bound_method ||= unbound_method.bind(self)
-        bound_method.call(*args)
-      end
+      hidden_method = find_hidden_method(name)
+      fail "Don't know how to reveal method '#{name}'" unless hidden_method
+      define_method(name, hidden_method)
     end
   end
   
