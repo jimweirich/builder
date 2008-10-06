@@ -23,14 +23,14 @@ module Builder
   # Examples will demonstrate this easier than words.  In the
   # following, +xm+ is an +XmlMarkup+ object.
   #
-  #   xm.em("emphasized")             # => <em>emphasized</em>
-  #   xm.em { xmm.b("emp & bold") }   # => <em><b>emph &amp; bold</b></em>
+  #   xm.em("emphasized")            # => <em>emphasized</em>
+  #   xm.em { xm.b("emp & bold") }   # => <em><b>emph &amp; bold</b></em>
   #   xm.a("A Link", "href"=>"http://onestepback.org")
-  #                                   # => <a href="http://onestepback.org">A Link</a>
-  #   xm.div { br }                    # => <div><br/></div>
+  #                                  # => <a href="http://onestepback.org">A Link</a>
+  #   xm.div { xm.br }               # => <div><br/></div>
   #   xm.target("name"=>"compile", "option"=>"fast")
-  #                                   # => <target option="fast" name="compile"\>
-  #                                   # NOTE: order of attributes is not specified.
+  #                                  # => <target option="fast" name="compile"\>
+  #                                  # NOTE: order of attributes is not specified.
   #
   #   xm.instruct!                   # <?xml version="1.0" encoding="UTF-8"?>
   #   xm.html {                      # <html>
