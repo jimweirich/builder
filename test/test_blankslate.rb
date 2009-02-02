@@ -192,5 +192,17 @@ class TestBlankSlate < Test::Unit::TestCase
       assert_equal 43, direct_global
     end
   end
+
+  def test_reveal_should_not_bind_to_an_instance
+    with_object_id = Class.new(BlankSlate) do
+      reveal(:object_id)
+    end
+
+    obj1 = with_object_id.new
+    obj2 = with_object_id.new
+
+    assert obj1.object_id != obj2.object_id, 
+       "Revealed methods should not be bound to a particular instance"
+  end
 end
 
