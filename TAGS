@@ -1,8 +1,4 @@
 
-doc/jamis.rb,43
-module RDocRDoc1,0
-module PagePage2,12
-
 lib/blankslate.rb,455
 class BlankSlateBlankSlate17,621
     def hide(name)hide22,788
@@ -80,218 +76,21 @@ module BuilderBuilder14,315
     def _start_tag(sym, attrs, end_too=false)_start_tag53,1682
     def _end_tag(sym)_end_tag58,1804
 
-lib/builder/xmlmarkup.rb,775
+lib/builder/xmlmarkup.rb,776
 module BuilderBuilder16,425
   class XmlMarkup < XmlBaseXmlMarkup160,5942
-    def initialize(options={})initialize185,6995
-    def target!target!193,7220
-    def comment!(comment_text)comment!197,7259
-    def declare!(inst, *args, &block)declare!208,7555
-    def instruct!(directive_tag=:xml, attrs={})instruct!241,8433
-    def cdata!(text)cdata!263,9017
-    def _text(text)_text274,9341
-    def _special(open, close, data=nil, attrs=nil, order=[])_special279,9431
-    def _start_tag(sym, attrs, end_too=false)_start_tag290,9765
-    def _end_tag(sym)_end_tag298,9964
-    def _insert_attributes(attrs, order=[])_insert_attributes303,10073
-    def _attr_value(value)_attr_value314,10388
-    def _ensure_no_block(got_block)_ensure_no_block323,10533
+    def initialize(options={})initialize186,7059
+    def target!target!194,7284
+    def comment!(comment_text)comment!198,7323
+    def declare!(inst, *args, &block)declare!209,7619
+    def instruct!(directive_tag=:xml, attrs={})instruct!242,8497
+    def cdata!(text)cdata!264,9081
+    def _text(text)_text275,9405
+    def _special(open, close, data=nil, attrs=nil, order=[])_special280,9495
+    def _start_tag(sym, attrs, end_too=false)_start_tag291,9829
+    def _end_tag(sym)_end_tag299,10028
+    def _insert_attributes(attrs, order=[])_insert_attributes304,10137
+    def _attr_value(value)_attr_value315,10452
+    def _ensure_no_block(got_block)_ensure_no_block324,10597
 
 lib/builder.rb,0
-
-scripts/publish.rb,0
-
-test/performance.rb,45
-  def XmlMarkup._escape(text)_escape19,385
-
-test/preload.rb,148
-module KernelKernel7,179
-    def method_added(name)method_added11,294
-class ObjectObject19,430
-    def method_added(name)method_added23,544
-
-test/test_blankslate.rb,2689
-module LateObjectLateObject9,168
-  def late_objectlate_object10,186
-  def LateObject.included(mod)included13,217
-module LateKernelLateKernel20,403
-  def late_kernellate_kernel21,421
-  def LateKernel.included(mod)included24,452
-module KernelKernel32,663
-  def late_additionlate_addition35,699
-  def double_late_additiondouble_late_addition39,735
-  def double_late_additiondouble_late_addition43,776
-class Object Object51,902
-  def another_late_additionanother_late_addition53,937
-module GlobalModuleGlobalModule59,1029
- def global_inclusionglobal_inclusion60,1049
-def direct_globaldirect_global66,1108
-class TestBlankSlate < Test::Unit::TestCaseTestBlankSlate73,1238
-  def setupsetup74,1282
-  def test_undefined_methods_remain_undefinedtest_undefined_methods_remain_undefined78,1326
-  def test_undefined_methods_remain_undefined_during_instance_evaltest_undefined_methods_remain_undefined_during_instance_eval86,1610
-  def test_private_methods_are_undefinedtest_private_methods_are_undefined95,1876
-  def test_targetted_private_methods_are_undefined_during_instance_evaltest_targetted_private_methods_are_undefined_during_instance_eval101,1989
-  def test_untargetted_private_methods_are_defined_during_instance_evaltest_untargetted_private_methods_are_defined_during_instance_eval107,2170
-  def test_methods_added_late_to_kernel_remain_undefinedtest_methods_added_late_to_kernel_remain_undefined117,2385
-  def test_methods_added_late_to_object_remain_undefinedtest_methods_added_late_to_object_remain_undefined122,2544
-  def test_methods_added_late_to_global_remain_undefinedtest_methods_added_late_to_global_remain_undefined127,2721
-  def test_preload_method_addedtest_preload_method_added132,2880
-  def test_method_defined_late_multiple_times_remain_undefinedtest_method_defined_late_multiple_times_remain_undefined137,3041
-  def test_late_included_module_in_object_is_oktest_late_included_module_in_object_is_ok142,3218
-  def test_late_included_module_in_kernel_is_oktest_late_included_module_in_kernel_is_ok147,3360
-  def test_revealing_previously_hidden_methods_are_callabletest_revealing_previously_hidden_methods_are_callable151,3467
-  def test_revealing_previously_hidden_methods_are_callable_with_blocktest_revealing_previously_hidden_methods_are_callable_with_block158,3649
-      def given_block(&block)given_block160,3749
-  def test_revealing_a_hidden_method_twice_is_oktest_revealing_a_hidden_method_twice_is_ok171,3961
-  def test_revealing_unknown_hidden_method_is_an_errortest_revealing_unknown_hidden_method_is_an_error179,4151
-  def test_global_includes_still_worktest_global_includes_still_work187,4317
-
-test/test_cssbuilder.rb,973
-class TestCSS < Test::Unit::TestCaseTestCSS8,105
-  def setupsetup9,142
-  def test_createtest_create13,189
-  def test_no_blocktest_no_block17,238
-  def test_blocktest_block22,317
-  def test_idtest_id29,451
-  def test_classtest_class34,574
-  def test_elem_with_idtest_elem_with_id39,703
-  def test_elem_with_classtest_elem_with_class44,846
-  def test_commenttest_comment49,995
-  def test_selectortest_selector54,1091
-  def test_plustest_plus59,1222
-  def test_plus_with_blocktest_plus_with_block64,1312
-  def test_contextualtest_contextual69,1457
-  def test_contextual_with_blocktest_contextual_with_block74,1553
-  def test_childtest_child79,1704
-  def test_child_with_blocktest_child_with_block84,1795
-  def test_multiple_optest_multiple_op89,1941
-  def test_alltest_all94,2057
-  def test_all_with_attstest_all_with_atts99,2186
-  def test_multiple_basictest_multiple_basic104,2367
-  def test_multiple_opstest_multiple_ops110,2556
-
-test/test_eventbuilder.rb,655
-class TestEvents < Test::Unit::TestCaseTestEvents1,0
-  class TargetTarget3,41
-    def initializeinitialize6,81
-    def start_tag(tag, attrs)start_tag10,128
-    def end_tag(tag)end_tag14,209
-    def text(string)text18,276
-  def setupsetup25,351
-  def test_simpletest_simple30,447
-  def test_nestedtest_nested37,564
-  def test_texttest_text46,757
-  def test_special_texttest_special_text54,901
-  def test_text_with_entitytest_text_with_entity62,1057
-  def test_attributestest_attributes70,1225
-  def test_moderately_complextest_moderately_complex77,1377
-  def expect(value)expect125,2645
-  def expect_doneexpect_done129,2717
-
-test/test_markupbuilder.rb,5123
-class TestMarkup < Test::Unit::TestCaseTestMarkup18,449
-  def setupsetup19,489
-  def test_createtest_create23,542
-  def test_simpletest_simple27,591
-  def test_valuetest_value32,675
-  def test_nestedtest_nested37,771
-  def test_attributestest_attributes42,897
-  def test_string_attributes_are_quoted_by_defaulttest_string_attributes_are_quoted_by_default47,999
-  def test_symbol_attributes_are_unquoted_by_defaulttest_symbol_attributes_are_unquoted_by_default52,1138
-  def test_attributes_quoted_can_be_turned_ontest_attributes_quoted_can_be_turned_on57,1284
-  def test_mixed_attribute_quoting_with_nested_builderstest_mixed_attribute_quoting_with_nested_builders63,1490
-  def test_multiple_attributestest_multiple_attributes72,1772
-  def test_attributes_with_texttest_attributes_with_text77,1921
-  def test_complextest_complex82,2090
-  def test_funky_symboltest_funky_symbol89,2281
-  def test_tag_can_handle_private_methodtest_tag_can_handle_private_method94,2445
-  def test_no_explicit_markertest_no_explicit_marker99,2596
-  def test_reference_local_varstest_reference_local_vars104,2712
-  def test_reference_methodstest_reference_methods110,2874
-  def test_append_texttest_append_text115,3017
-  def test_ambiguous_markuptest_ambiguous_markup120,3139
-  def test_capitalized_methodtest_capitalized_method128,3330
-  def test_escapingtest_escaping133,3499
-  def test_non_escapingtest_non_escaping138,3659
-  def test_return_valuetest_return_value143,3851
-  def test_stacked_builderstest_stacked_builders148,3941
-  def namename154,4165
-class TestAttributeEscaping < Test::Unit::TestCaseTestAttributeEscaping159,4197
-  def setupsetup161,4249
-  def test_element_gttest_element_gt165,4302
-  def test_element_amptest_element_amp170,4408
-  def test_element_amp2test_element_amp2175,4518
-  def test_attr_lesstest_attr_less180,4631
-  def test_attr_amptest_attr_amp185,4740
-  def test_attr_quottest_attr_quot190,4851
-class TestNameSpaces < Test::Unit::TestCaseTestNameSpaces197,4972
-  def setupsetup198,5016
-  def test_simple_name_spacestest_simple_name_spaces202,5081
-  def test_longtest_long207,5182
-class TestDeclarations < Test::Unit::TestCaseTestDeclarations233,5885
-  def setupsetup234,5931
-  def test_declaretest_declare238,5996
-  def test_bare_argtest_bare_arg243,6095
-  def test_string_argtest_string_arg248,6204
-  def test_mixed_argstest_mixed_args253,6326
-  def test_nested_declarationstest_nested_declarations258,6518
-  def test_nested_indented_declarationstest_nested_indented_declarations266,6789
-  def test_complex_declarationtest_complex_declaration273,7043
-class TestSpecialMarkup < Test::Unit::TestCaseTestSpecialMarkup290,7479
-  def setupsetup291,7526
-  def test_commenttest_comment295,7591
-  def test_indented_commenttest_indented_comment300,7698
-  def test_instructtest_instruct305,7827
-  def test_indented_instructtest_indented_instruct310,7954
-  def test_instruct_without_attributestest_instruct_without_attributes316,8122
-  def test_xml_instructtest_xml_instruct321,8233
-  def test_xml_instruct_with_overridestest_xml_instruct_with_overrides326,8359
-  def test_xml_instruct_with_standalongtest_xml_instruct_with_standalong331,8525
-  def test_no_blockstest_no_blocks336,8729
-  def test_cdatatest_cdata345,8948
-  def test_cdata_with_ampersandtest_cdata_with_ampersand350,9048
-class TestIndentedXmlMarkup < Test::Unit::TestCaseTestIndentedXmlMarkup356,9179
-  def setupsetup357,9230
-  def test_one_leveltest_one_level361,9295
-  def test_two_levelstest_two_levels366,9419
-  def test_initial_leveltest_initial_level374,9599
-  class TestUtfMarkup < Test::Unit::TestCaseTestUtfMarkup380,9823
-    def setupsetup381,9868
-    def teardownteardown385,9917
-    def test_use_entities_if_no_encoding_is_given_and_kcode_is_nonetest_use_entities_if_no_encoding_is_given_and_kcode_is_none389,9969
-    def test_use_entities_if_encoding_is_utf_but_kcode_is_nottest_use_entities_if_encoding_is_utf_but_kcode_is_not396,10185
-    def test_use_entities_if_kcode_is_utf_but_encoding_is_something_elsetest_use_entities_if_kcode_is_utf_but_encoding_is_something_else404,10443
-    def test_use_utf8_if_encoding_defaults_and_kcode_is_utf8test_use_utf8_if_encoding_defaults_and_kcode_is_utf8412,10713
-    def test_use_utf8_if_both_encoding_and_kcode_are_utf8test_use_utf8_if_both_encoding_and_kcode_are_utf8419,10922
-    def test_use_utf8_if_both_encoding_and_kcode_are_utf8_with_lowercasetest_use_utf8_if_both_encoding_and_kcode_are_utf8_with_lowercase427,11179
-  class TestXmlEvents < Test::Unit::TestCaseTestXmlEvents436,11457
-    def setupsetup437,11502
-    def test_simpletest_simple442,11613
-    def test_texttest_text448,11767
-    def test_attributestest_attributes455,11981
-    def test_indentedtest_indented463,12200
-    def pop_textpop_text475,12659
-    class EventHandlerEventHandler484,12853
-      def initializeinitialize486,12902
-      def start_tag(sym, attrs)start_tag490,12954
-      def end_tag(sym)end_tag494,13030
-      def text(txt)text498,13088
-
-test/test_namecollision.rb,286
-class TestNameCollisions < Test::Unit::TestCaseTestNameCollisions6,66
-  module CollideCollide7,114
-    def xchrxchr8,131
-  def test_no_collisiontest_no_collision12,159
-  def test_collisiontest_collision18,289
-  def test_collision_with_symboltest_collision_with_symbol24,414
-
-test/test_xchar.rb,355
-class TestXmlEscaping < Test::Unit::TestCaseTestXmlEscaping6,66
-  def test_asciitest_ascii7,111
-  def test_predefinedtest_predefined11,171
-  def test_invalidtest_invalid17,402
-  def test_iso_8859_1test_iso_8859_123,603
-  def test_win_1252test_win_125228,767
-  def test_utf8test_utf833,913
-  def test_utf8_verbatimtest_utf8_verbatim38,1063
