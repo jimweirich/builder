@@ -163,8 +163,9 @@ module Builder
     # option hash.
     #
     # :target=><em>target_object</em>::
-    #    Object receiving the markup.  +out+ must respond to the
-    #    <tt><<</tt> operator.  The default is a plain string target.
+    #    Object receiving the markup.  +target_object+ must respond to
+    #    the <tt><<(<em>a_string</em>)</tt> operator and return
+    #    itself.  The default target is a plain string target.
     #    
     # :indent=><em>indentation</em>::
     #    Number of spaces used for indentation.  The default is no
@@ -174,7 +175,7 @@ module Builder
     #    Amount of initial indentation (specified in levels, not
     #    spaces).
     #    
-    # :escape_attrs=><b>OBSOLETE</em>::
+    # :escape_attrs=><em>OBSOLETE</em>::
     #    The :escape_attrs option is no longer supported by builder
     #    (and will be quietly ignored).  String attribute values are
     #    now automatically escaped.  If you need unescaped attribute
