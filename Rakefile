@@ -269,7 +269,7 @@ task :update_version => [:prerelease] do
     if ENV['RELTEST']
       announce "Release Task Testing, skipping commiting of new version"
     else
-      sh %{cvs commit -m "Updated to version #{PKG_VERSION}" Rakefile}
+      sh "cvs commit -m \"Updated to version #{PKG_VERSION}\" Rakefile"
     end
   end
 end
@@ -293,5 +293,3 @@ task :install_jamis_template do
   fail "Unabled to write to #{dest_dir}" unless File.writable?(dest_dir)
   install "doc/jamis.rb", dest_dir, :verbose => true
 end
-
-require 'scripts/publish'
