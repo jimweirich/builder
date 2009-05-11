@@ -6,7 +6,7 @@ require 'rake/contrib/rubyforgepublisher'
 publisher = Rake::CompositePublisher.new
 publisher.add Rake::RubyForgePublisher.new('builder', 'jimweirich')
 publisher.add Rake::SshFilePublisher.new(
-  'umlcoop',
+  'linode',
   'htdocs/software/builder',
   '.',
   'builder.blurb')
