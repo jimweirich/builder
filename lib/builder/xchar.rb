@@ -92,10 +92,17 @@ class Fixnum
   # XML escaped version of chr. When <tt>escape</tt> is set to false
   # the CP1252 fix is still applied but utf-8 characters are not
   # converted to character entities.
-  def xchr(escape=true)
+  def xchr(escape_utf8=true, escape_markup_delimiters=true)
     n = XChar::CP1252[self] || self
     case n when *XChar::VALID
-      XChar::PREDEFINED[n] or (n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*')))
+      if escape_markup_delimiters && XChar::PREDEFINED.key?(n)
+        XChar::PREDEFINED[n]
+      else
+        if n<128 then n.chr
+        elsif escape_utf8 then "&##{n};"
+        else [n].pack('U*')
+        end
+      end
     else
       '*'
     end
@@ -111,8 +118,8 @@ class String
   # XML escaped version of to_s. When <tt>escape</tt> is set to false
   # the CP1252 fix is still applied but utf-8 characters are not
   # converted to character entities.
-  def to_xs(escape=true)
-    unpack('U*').map {|n| n.xchr(escape)}.join # ASCII, UTF-8
+  def to_xs(escape_utf8=true, escape_markup_delimiters=true)
+    unpack('U*').map {|n| n.xchr(escape_utf8, escape_markup_delimiters)}.join # ASCII, UTF-8
   rescue
     unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
   end
