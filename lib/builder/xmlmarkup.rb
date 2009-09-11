@@ -317,7 +317,7 @@ module Builder
       when Symbol
         value.to_s
       else
-        _escape_quote(value.to_s)
+        _escape_delimiters(value.to_s)
       end
     end
 
