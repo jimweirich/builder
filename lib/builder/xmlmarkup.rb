@@ -280,7 +280,7 @@ module Builder
     def _special(open, close, data=nil, attrs=nil, order=[])
       _indent
       @target << open
-      @target << data if data
+      @target << data.to_xs if data
       _insert_attributes(attrs, order) if attrs
       @target << close
       _newline

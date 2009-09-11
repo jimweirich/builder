@@ -351,6 +351,11 @@ class TestSpecialMarkup < Test::Unit::TestCase
     @xml.cdata!("TEST&CHECK")
     assert_equal "<![CDATA[TEST&CHECK]]>\n", @xml.target!
   end
+
+  def test_cdata_with_invalid_characters
+    @xml.cdata!("\x00")
+    assert_equal "<![CDATA[*]]>\n", @xml.target!
+  end
 end
 
 class TestIndentedXmlMarkup < Test::Unit::TestCase
