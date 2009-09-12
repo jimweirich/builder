@@ -20,6 +20,12 @@ class TestXmlEscaping < Test::Unit::TestCase
     assert_equal 'abc', 'abc'.to_xs
   end
 
+  def test_predefined
+    assert_equal '&amp;', '&'.to_xs              # ampersand
+    assert_equal '&lt;',  '<'.to_xs              # left angle bracket
+    assert_equal '&gt;',  '>'.to_xs              # right angle bracket
+  end
+
   def test_invalid
     assert_equal '*', "\x00".to_xs               # null
     assert_equal '*', "\x0C".to_xs               # form feed
@@ -44,7 +50,7 @@ class TestXmlEscaping < Test::Unit::TestCase
   def test_utf8_verbatim
     assert_equal "\xE2\x80\x99", "\xE2\x80\x99".to_xs(false)  # right single quote
     assert_equal "\xC2\xA9",  "\xC2\xA9".to_xs(false)         # copy
-    assert_equal "\xC2\xA9&\xC2\xA9",
+    assert_equal "\xC2\xA9&amp;\xC2\xA9",
       "\xC2\xA9&\xC2\xA9".to_xs(false)                        # copy with ampersand
   end
 end

@@ -10,7 +10,6 @@ module Builder
   # XmlBase is a base class for building XML builders.  See
   # Builder::XmlMarkup and Builder::XmlEvents for examples.
   class XmlBase < BlankSlate
-    XML_ESCAPE = { '&' => '&amp;',  '>' => '&gt;',   '<' => '&lt;', '"' => '&quot;' }
 
     # Create an XML markup builder.
     #
@@ -116,11 +115,11 @@ module Builder
     
     require 'builder/xchar'
     def _escape(text)
-      _escape_delimiters(text).to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+      text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
     end
 
-    def _escape_delimiters(text)
-      text.gsub(/[&"><]/) { |special| XML_ESCAPE[special] }
+    def _escape_quote(text)
+      _escape(text).gsub(%r{"}, '&quot;')  # " WART
     end
 
     def _newline
