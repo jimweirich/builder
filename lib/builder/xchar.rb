@@ -64,13 +64,6 @@ module Builder
       159 =>  376,		# latin capital letter y with diaeresis
     }
 
-    # See http://www.w3.org/TR/REC-xml/#dt-chardata for details.
-    PREDEFINED = {
-      38 => '&amp;',		# ampersand
-      60 => '&lt;',		# left angle bracket
-      62 => '&gt;',		# right angle bracket
-    }
-
     # See http://www.w3.org/TR/REC-xml/#charsets for details.
     VALID = [
       0x9, 0xA, 0xD,
@@ -95,7 +88,7 @@ class Fixnum
   def xchr(escape=true)
     n = XChar::CP1252[self] || self
     case n when *XChar::VALID
-      XChar::PREDEFINED[n] or (n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*')))
+      n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*'))
     else
       '*'
     end
