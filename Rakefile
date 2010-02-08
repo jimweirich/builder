@@ -49,7 +49,7 @@ end
 rd = Rake::RDocTask.new("rdoc") { |rdoc|
   rdoc.rdoc_dir = 'html'
   rdoc.title    = "Builder for Markup"
-  rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README'
+  rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
   rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc')
   rdoc.template = 'doc/jamis.rb'
 }
@@ -99,7 +99,7 @@ simple to do.  Currently the following builder objects are supported:
     s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
     s.rdoc_options <<
       '--title' <<  'Builder -- Easy XML Building' <<
-      '--main' << 'README' <<
+      '--main' << 'README.rdoc' <<
       '--line-numbers'
     
     s.author = "Jim Weirich"
@@ -130,7 +130,7 @@ classes that make heavy use of method_missing.
     s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
     s.rdoc_options <<
       '--title' <<  'BlankSlate -- Base Class for building proxies.' <<
-      '--main' << 'README' <<
+      '--main' << 'README.rdoc' <<
       '--line-numbers'
     
     s.author = "Jim Weirich"

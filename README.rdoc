@@ -217,9 +217,16 @@ incompatibility are:
     xml.target!  =>
       "<sample>Iñtërnâtiônàl</sample>"
 
+== Links
+
+Documents::      http://builder.rubyforge.org/
+Github Clone::   git://github.com/jimweirich/builder.git
+Issue Tracking:: http://www.pivotaltracker.com/projects/29210
+Bug Reports::    http://onestepback.org/cgi-bin/bugs.cgi?project=builder
+
 == Contact
 
-Author::     Jim Weirich
-Email::      jim@weirichhouse.org
-Home Page::  http://onestepback.org
-License::    MIT Licence (http://www.opensource.org/licenses/mit-license.html)
+Author::         Jim Weirich
+Email::          jim@weirichhouse.org
+Home Page::      http://onestepback.org
+License::        MIT Licence (http://www.opensource.org/licenses/mit-license.html)
