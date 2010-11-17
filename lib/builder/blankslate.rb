@@ -8,13 +8,16 @@
 # above copyright notice is included.
 #++
 
-require 'blankslate'
-
 ######################################################################
 # BlankSlate has been promoted to a top level name and is now
 # available as a standalone gem.  We make the name available in the
 # Builder namespace for compatibility.
 #
 module Builder
-  BlankSlate = ::BlankSlate
+  if Object::const_defined?(:BasicObject)
+    BlankSlate = ::BasicObject
+  else
+    require 'blankslate'
+    BlankSlate = ::BlankSlate
+  end
 end

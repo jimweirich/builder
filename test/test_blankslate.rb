@@ -81,6 +81,13 @@ end
 # Test case for blank slate.
 #
 class TestBlankSlate < Test::Unit::TestCase
+  if Object::const_defined?(:BasicObject)
+    def self.suite
+      # skip tests if :BasicObject is present
+      Test::Unit::TestSuite.new(name)
+    end
+  end
+
   def setup
     @bs = BlankSlate.new
   end

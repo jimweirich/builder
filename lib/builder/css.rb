@@ -136,14 +136,14 @@ module Builder
     end
 
     def id!(arg, &block)
-      _start_container('#'+arg.to_s, nil, block_given?)
+      _start_container('#'+arg.to_s, nil, ::Kernel.block_given?)
       _css_block(block) if block
       _unify_block
       self
     end
 
     def class!(arg, &block)
-      _start_container('.'+arg.to_s, nil, block_given?)
+      _start_container('.'+arg.to_s, nil, ::Kernel.block_given?)
       _css_block(block) if block
       _unify_block
       self
@@ -169,7 +169,7 @@ module Builder
     end
 
     def method_missing(sym, *args, &block)
-      sym = "#{sym}:#{args.shift}" if args.first.kind_of?(Symbol)
+      sym = "#{sym}:#{args.shift}" if args.first.kind_of?(::Symbol)
       if block
         _start_container(sym, args.first)
         _css_block(block)

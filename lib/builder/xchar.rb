@@ -10,14 +10,14 @@
 
 module Builder
   def self.check_for_name_collision(klass, method_name, defined_constant=nil)
-    if klass.instance_methods.include?(method_name.to_s)
+    if klass.method_defined?(method_name.to_s)
       fail RuntimeError,
 	"Name Collision: Method '#{method_name}' is already defined in #{klass}"
     end
   end
 end
 
-if ! defined?(Builder::XChar)
+if ! defined?(Builder::XChar) and ! String.method_defined?(:encode)
   Builder.check_for_name_collision(String, "to_xs")
   Builder.check_for_name_collision(Fixnum, "xchr")
 end
@@ -78,42 +78,120 @@ module Builder
       (0xE000..0xFFFD),
       (0x10000..0x10FFFF)
     ]
+
+    # http://www.fileformat.info/info/unicode/char/fffd/index.htm
+    REPLACEMENT_CHAR =
+      if String.method_defined?(:encode)
+        "\uFFFD"
+      elsif $KCODE == 'UTF8'
+        "\xEF\xBF\xBD"
+      else
+        '*'
+      end
   end
 
 end
 
 
-######################################################################
-# Enhance the Fixnum class with a XML escaped character conversion.
-#
-class Fixnum
-  XChar = Builder::XChar if ! defined?(XChar)
+if String.method_defined?(:encode)
+  module Builder
+    module XChar # :nodoc:
+      CP1252_DIFFERENCES, UNICODE_EQUIVALENT = Builder::XChar::CP1252.each.
+        inject([[],[]]) {|(domain,range),(key,value)|
+          [domain << key,range << value]
+        }.map {|seq| seq.pack('U*').force_encoding('utf-8')}
+  
+      XML_PREDEFINED = Regexp.new('[' +
+        Builder::XChar::PREDEFINED.keys.pack('U*').force_encoding('utf-8') +
+      ']')
+  
+      INVALID_XML_CHAR = Regexp.new('[^'+
+        Builder::XChar::VALID.map { |item|
+          case item
+          when Fixnum
+            [item].pack('U').force_encoding('utf-8')
+          when Range
+            [item.first, '-'.ord, item.last].pack('UUU').force_encoding('utf-8')
+          end
+        }.join +
+      ']')
+  
+      ENCODING_BINARY = Encoding.find('BINARY')
+      ENCODING_UTF8   = Encoding.find('UTF-8')
+      ENCODING_ISO1   = Encoding.find('ISO-8859-1')
 
-  # XML escaped version of chr. When <tt>escape</tt> is set to false
-  # the CP1252 fix is still applied but utf-8 characters are not
-  # converted to character entities.
-  def xchr(escape=true)
-    n = XChar::CP1252[self] || self
-    case n when *XChar::VALID
-      XChar::PREDEFINED[n] or (n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*')))
-    else
-      '*'
+      # convert a string to valid UTF-8, compensating for a number of
+      # common errors.
+      def XChar.unicode(string)
+        if string.encoding == ENCODING_BINARY
+          if string.ascii_only?
+            string
+          else
+            string = string.clone.force_encoding(ENCODING_UTF8)
+            if string.valid_encoding?
+              string
+            else
+              string.encode(ENCODING_UTF8, ENCODING_ISO1)
+            end
+          end
+
+        elsif string.encoding == ENCODING_UTF8
+          if string.valid_encoding?
+            string
+          else
+            string.encode(ENCODING_UTF8, ENCODING_ISO1)
+          end
+
+        else
+          string.encode(ENCODING_UTF8)
+        end
+      end
+
+      # encode a string per XML rules
+      def XChar.encode(string)
+        unicode(string).
+          tr(CP1252_DIFFERENCES, UNICODE_EQUIVALENT).
+          gsub(INVALID_XML_CHAR, REPLACEMENT_CHAR).
+          gsub(XML_PREDEFINED) {|c| PREDEFINED[c.ord]}
+      end
     end
   end
-end
 
+else
 
-######################################################################
-# Enhance the String class with a XML escaped character version of
-# to_s.
-#
-class String
-  # XML escaped version of to_s. When <tt>escape</tt> is set to false
-  # the CP1252 fix is still applied but utf-8 characters are not
-  # converted to character entities.
-  def to_xs(escape=true)
-    unpack('U*').map {|n| n.xchr(escape)}.join # ASCII, UTF-8
-  rescue
-    unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
+  ######################################################################
+  # Enhance the Fixnum class with a XML escaped character conversion.
+  #
+  class Fixnum
+    XChar = Builder::XChar if ! defined?(XChar)
+  
+    # XML escaped version of chr. When <tt>escape</tt> is set to false
+    # the CP1252 fix is still applied but utf-8 characters are not
+    # converted to character entities.
+    def xchr(escape=true)
+      n = XChar::CP1252[self] || self
+      case n when *XChar::VALID
+        XChar::PREDEFINED[n] or 
+          (n<128 ? n.chr : (escape ? "&##{n};" : [n].pack('U*')))
+      else
+        Builder::XChar::REPLACEMENT_CHAR
+      end
+    end
+  end
+  
+
+  ######################################################################
+  # Enhance the String class with a XML escaped character version of
+  # to_s.
+  #
+  class String
+    # XML escaped version of to_s. When <tt>escape</tt> is set to false
+    # the CP1252 fix is still applied but utf-8 characters are not
+    # converted to character entities.
+    def to_xs(escape=true)
+      unpack('U*').map {|n| n.xchr(escape)}.join # ASCII, UTF-8
+    rescue
+      unpack('C*').map {|n| n.xchr}.join # ISO-8859-1, WIN-1252
+    end
   end
 end

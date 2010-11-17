@@ -118,7 +118,7 @@ class TestMarkup < Test::Unit::TestCase
   end
   
   def test_ambiguous_markup
-    ex = assert_raises(ArgumentError) {
+    ex = assert_raise(ArgumentError) {
       @xml.h1("data1") { b }
     }
     assert_match /\btext\b/, ex.message
@@ -228,6 +228,22 @@ class TestNameSpaces < Test::Unit::TestCase
     assert_match /<owl:Restriction>/m, xml.target!
   end
   
+  def test_ensure
+    xml = Builder::XmlMarkup.new
+    xml.html do
+      xml.body do
+       begin
+         xml.p do
+           raise Exception.new('boom')
+         end
+       rescue Exception => e
+         xml.pre e
+       end
+      end
+    end
+    assert_match %r{<p>},  xml.target!
+    assert_match %r{</p>}, xml.target!
+  end
 end
 
 class TestDeclarations < Test::Unit::TestCase
@@ -334,10 +350,10 @@ class TestSpecialMarkup < Test::Unit::TestCase
   end
 
   def test_no_blocks
-    assert_raises(Builder::IllegalBlockError) do
+    assert_raise(Builder::IllegalBlockError) do
       @xml.instruct! { |x| x.hi }
     end
-    assert_raises(Builder::IllegalBlockError) do
+    assert_raise(Builder::IllegalBlockError) do
       @xml.comment!(:element) { |x| x.hi }
     end
   end
@@ -378,58 +394,83 @@ class TestIndentedXmlMarkup < Test::Unit::TestCase
   end
 
   class TestUtfMarkup < Test::Unit::TestCase
-    def setup
-      @old_kcode = $KCODE
+    if ! String.method_defined?(:encode)
+      def setup
+        @old_kcode = $KCODE
+      end
+
+      def teardown
+        $KCODE = @old_kcode
+      end
+
+      def test_use_entities_if_no_encoding_is_given_and_kcode_is_none
+        $KCODE = 'NONE'
+        xml = Builder::XmlMarkup.new
+        xml.p("\xE2\x80\x99")
+        assert_match(%r(<p>&#8217;</p>), xml.target!) #
+      end
+
+      def test_use_entities_if_encoding_is_utf_but_kcode_is_not
+        $KCODE = 'NONE'
+        xml = Builder::XmlMarkup.new
+        xml.instruct!(:xml, :encoding => 'UTF-8')
+        xml.p("\xE2\x80\x99")
+        assert_match(%r(<p>&#8217;</p>), xml.target!) #
+      end
+    else
+      # change in behavior.  As there is no $KCODE anymore, the default
+      # moves from "does not understand utf-8" to "supports utf-8".
+
+      def test_use_entities_if_no_encoding_is_given_and_kcode_is_none
+        xml = Builder::XmlMarkup.new
+        xml.p("\xE2\x80\x99")
+        assert_match("<p>\u2019</p>", xml.target!) #
+      end
+
+      def test_use_entities_if_encoding_is_utf_but_kcode_is_not
+        xml = Builder::XmlMarkup.new
+        xml.instruct!(:xml, :encoding => 'UTF-8')
+        xml.p("\xE2\x80\x99")
+        assert_match("<p>\u2019</p>", xml.target!) #
+      end
     end
 
-    def teardown
-      $KCODE = @old_kcode
-    end
-
-    def test_use_entities_if_no_encoding_is_given_and_kcode_is_none
-      $KCODE = 'NONE'
-      xml = Builder::XmlMarkup.new
-      xml.p("\xE2\x80\x99")
-      assert_match(%r(<p>&#8217;</p>), xml.target!) #
-    end
-
-    def test_use_entities_if_encoding_is_utf_but_kcode_is_not
-      $KCODE = 'NONE'
-      xml = Builder::XmlMarkup.new
-      xml.instruct!(:xml, :encoding => 'UTF-8')
-      xml.p("\xE2\x80\x99")
-      assert_match(%r(<p>&#8217;</p>), xml.target!) #
+    def encode string, encoding
+      if !String.method_defined?(:encode)
+        $KCODE = encoding
+        string
+      elsif encoding == 'UTF8'
+        string.force_encoding('UTF-8')
+      else
+        string
+      end
     end
 
     def test_use_entities_if_kcode_is_utf_but_encoding_is_something_else
-      $KCODE = 'UTF8'
       xml = Builder::XmlMarkup.new
       xml.instruct!(:xml, :encoding => 'UTF-16')
-      xml.p("\xE2\x80\x99")
+      xml.p(encode("\xE2\x80\x99", 'UTF8'))
       assert_match(%r(<p>&#8217;</p>), xml.target!) #
     end
 
     def test_use_utf8_if_encoding_defaults_and_kcode_is_utf8
-      $KCODE = 'UTF8'
       xml = Builder::XmlMarkup.new
-      xml.p("\xE2\x80\x99")
-      assert_equal "<p>\xE2\x80\x99</p>", xml.target!
+      xml.p(encode("\xE2\x80\x99",'UTF8'))
+      assert_equal encode("<p>\xE2\x80\x99</p>",'UTF8'), xml.target!
     end
 
     def test_use_utf8_if_both_encoding_and_kcode_are_utf8
-      $KCODE = 'UTF8'
       xml = Builder::XmlMarkup.new
       xml.instruct!(:xml, :encoding => 'UTF-8')
-      xml.p("\xE2\x80\x99")
-      assert_match(%r(<p>\xE2\x80\x99</p>), xml.target!)
+      xml.p(encode("\xE2\x80\x99",'UTF8'))
+      assert_match encode("<p>\xE2\x80\x99</p>",'UTF8'), xml.target!
     end
 
     def test_use_utf8_if_both_encoding_and_kcode_are_utf8_with_lowercase
-      $KCODE = 'UTF8'
       xml = Builder::XmlMarkup.new
       xml.instruct!(:xml, :encoding => 'utf-8')
-      xml.p("\xE2\x80\x99")
-      assert_match(%r(<p>\xE2\x80\x99</p>), xml.target!)
+      xml.p(encode("\xE2\x80\x99",'UTF8'))
+      assert_match encode("<p>\xE2\x80\x99</p>",'UTF8'), xml.target!
     end
   end
 

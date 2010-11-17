@@ -41,6 +41,7 @@ task :tu => [:test_units]
 
 Rake::TestTask.new("test_units") do |t|
   t.test_files = FileList['test/test*.rb']
+  t.libs << "."
   t.verbose = false
 end
 
@@ -59,7 +60,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
 # gem files.
 
 PKG_FILES = FileList[
-  'lib/**/*.rb', 
+  'lib/**/*.rb',
   'test/**/*.rb',
   'scripts/**/*.rb'
 ]
@@ -68,14 +69,14 @@ PKG_FILES.exclude('lib/builder/css.rb')
 
 BLANKSLATE_FILES = FileList[
   'lib/blankslate.rb',
-  'test/testblankslate.rb'
+  'test/test_blankslate.rb'
 ]
 
 if ! defined?(Gem)
   puts "Package Target requires RubyGEMs"
 else
   spec = Gem::Specification.new do |s|
-    
+
     #### Basic information.
 
     s.name = 'builder'
@@ -92,58 +93,58 @@ simple to do.  Currently the following builder objects are supported:
     s.files = PKG_FILES.to_a
     s.require_path = 'lib'
     s.autorequire = 'builder'
-    
+
     s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
-    
+
     s.has_rdoc = true
     s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
     s.rdoc_options <<
       '--title' <<  'Builder -- Easy XML Building' <<
       '--main' << 'README.rdoc' <<
       '--line-numbers'
-    
+
     s.author = "Jim Weirich"
     s.email = "jim@weirichhouse.org"
     s.homepage = "http://onestepback.org"
   end
-  
+
   blankslate_spec = Gem::Specification.new do |s|
-    
+
     #### Basic information.
-    
+
     s.name = 'blankslate'
     s.version = PKG_VERSION
     s.summary = "Blank Slate base class."
     s.description = %{\
 BlankSlate provides a base class where almost all of the methods from Object and
 Kernel have been removed.  This is useful when providing proxy object and other
-classes that make heavy use of method_missing.  
+classes that make heavy use of method_missing.
 }
-    
+
     s.files = BLANKSLATE_FILES.to_a
     s.require_path = 'lib'
     s.autorequire = 'builder'
-    
+
     s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
-    
+
     s.has_rdoc = true
     s.extra_rdoc_files = rd.rdoc_files.reject { |fn| fn =~ /\.rb$/ }.to_a
     s.rdoc_options <<
       '--title' <<  'BlankSlate -- Base Class for building proxies.' <<
       '--main' << 'README.rdoc' <<
       '--line-numbers'
-    
+
     s.author = "Jim Weirich"
     s.email = "jim@weirichhouse.org"
     s.homepage = "http://onestepback.org"
   end
-  
+
   namespace 'builder' do
     Rake::GemPackageTask.new(spec) do |t|
       t.need_tar = true
     end
   end
-  
+
   namespace 'blankslate' do
     Rake::GemPackageTask.new(blankslate_spec) do |t|
       t.need_tar = true
@@ -157,7 +158,7 @@ desc "Look for Debugging print lines"
 task :dbg do
   FileList['**/*.rb'].egrep /\bDBG|\bbreakpoint\b/
 end
-  
+
 
 # RCov ---------------------------------------------------------------
 begin
@@ -183,15 +184,15 @@ end
 namespace "tags" do
   desc "Create a TAGS file"
   task :emacs => "TAGS"
-  
+
   TAGS = 'xctags -e'
-  
+
   file "TAGS" => SRC_RB do
     puts "Makings TAGS"
     sh "#{TAGS} #{SRC_RB}", :verbose => false
   end
 end
-  
+
 # --------------------------------------------------------------------
 # Creating a release
 
@@ -207,23 +208,23 @@ task :release => [
   :update_version,
   :package,
   :tag] do
-  
-  announce 
+
+  announce
   announce "**************************************************************"
   announce "* Release #{PKG_VERSION} Complete."
   announce "* Packages ready to upload."
   announce "**************************************************************"
-  announce 
+  announce
 end
 
 # Validate that everything is ready to go for a release.
 task :prerelease do
-  announce 
+  announce
   announce "**************************************************************"
   announce "* Making RubyGem Release #{PKG_VERSION}"
   announce "* (current version #{CURRENT_VERSION})"
   announce "**************************************************************"
-  announce  
+  announce
 
   # Is a release number supplied?
   unless ENV['REL']

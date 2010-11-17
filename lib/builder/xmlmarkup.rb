@@ -196,7 +196,7 @@ module Builder
     end
 
     def comment!(comment_text)
-      _ensure_no_block block_given?
+      _ensure_no_block ::Kernel::block_given?
       _special("<!-- ", " -->", comment_text, nil)
     end
 
@@ -211,13 +211,13 @@ module Builder
       @target << "<!#{inst}"
       args.each do |arg|
         case arg
-        when String
+        when ::String
           @target << %{ "#{arg}"} # " WART
-        when Symbol
+        when ::Symbol
           @target << " #{arg}"
         end
       end
-      if block_given?
+      if ::Kernel::block_given?
         @target << " ["
         _newline
         _nested_structures(block)
@@ -240,7 +240,7 @@ module Builder
     # $KCODE is "UTF8", then builder will emit UTF-8 encoded strings
     # rather than the entity encoding normally used.
     def instruct!(directive_tag=:xml, attrs={})
-      _ensure_no_block block_given?
+      _ensure_no_block ::Kernel::block_given?
       if directive_tag == :xml
         a = { :version=>"1.0", :encoding=>"UTF-8" }
         attrs = a.merge attrs
@@ -262,7 +262,7 @@ module Builder
     #        #=> <![CDATA[text to be included in cdata]]>
     #
     def cdata!(text)
-      _ensure_no_block block_given?
+      _ensure_no_block ::Kernel::block_given?
       _special("<![CDATA[", "]]>", text, nil)
     end
     
@@ -314,7 +314,7 @@ module Builder
 
     def _attr_value(value)
       case value
-      when Symbol
+      when ::Symbol
         value.to_s
       else
         _escape_quote(value.to_s)
@@ -323,8 +323,9 @@ module Builder
 
     def _ensure_no_block(got_block)
       if got_block
-        fail IllegalBlockError,
-        "Blocks are not allowed on XML instructions"
+        ::Kernel::raise IllegalBlockError.new(
+          "Blocks are not allowed on XML instructions"
+        )
       end
     end
 

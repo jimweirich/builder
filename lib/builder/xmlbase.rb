@@ -40,10 +40,10 @@ module Builder
     def method_missing(sym, *args, &block)
       text = nil
       attrs = nil
-      sym = "#{sym}:#{args.shift}" if args.first.kind_of?(Symbol)
+      sym = "#{sym}:#{args.shift}" if args.first.kind_of?(::Symbol)
       args.each do |arg|
         case arg
-        when Hash
+        when ::Hash
           attrs ||= {}
           attrs.merge!(arg)
         else
@@ -53,15 +53,19 @@ module Builder
       end
       if block
         unless text.nil?
-          raise ArgumentError, "XmlMarkup cannot mix a text argument with a block"
+          ::Kernel::raise ::ArgumentError,
+            "XmlMarkup cannot mix a text argument with a block"
         end
         _indent
         _start_tag(sym, attrs)
         _newline
-        _nested_structures(block)
-        _indent
-        _end_tag(sym)
-        _newline
+        begin
+          _nested_structures(block)
+        ensure
+          _indent
+          _end_tag(sym)
+          _newline
+        end
       elsif text.nil?
         _indent
         _start_tag(sym, attrs, true)
@@ -114,8 +118,22 @@ module Builder
     private
     
     require 'builder/xchar'
-    def _escape(text)
-      text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+    if ::String.method_defined?(:encode)
+      def _escape(text)
+        result = XChar.encode(text)
+        begin
+          result.encode(@encoding)
+        rescue
+          # if the encoding can't be supported, use numeric character references
+          result.
+            gsub(/[^\u0000-\u007F]/) {|c| "&##{c.ord};"}.
+            force_encoding('ascii')
+        end
+      end
+    else
+      def _escape(text)
+        text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+      end
     end
 
     def _escape_quote(text)

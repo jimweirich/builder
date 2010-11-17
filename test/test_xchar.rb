@@ -15,7 +15,28 @@
 require 'test/unit'
 require 'builder/xchar'
 
+if String.method_defined?(:encode)
+  class String
+    ENCODING_BINARY = Encoding.find('BINARY')
+
+    # shim method for testing purposes
+    def to_xs(escape=true)
+      raise NameError.new('to_xs') unless caller[0].index(__FILE__)
+
+      result = Builder::XChar.encode(self)
+      if escape
+        result.gsub(/[^\u0000-\u007F]/) {|c| "&##{c.ord};"}
+      else
+        # really only useful for testing purposes
+        result.force_encoding(ENCODING_BINARY)
+      end
+    end
+  end
+end
+
 class TestXmlEscaping < Test::Unit::TestCase
+  REPLACEMENT_CHAR = Builder::XChar::REPLACEMENT_CHAR.to_xs
+
   def test_ascii
     assert_equal 'abc', 'abc'.to_xs
   end
@@ -27,9 +48,9 @@ class TestXmlEscaping < Test::Unit::TestCase
   end
 
   def test_invalid
-    assert_equal '*', "\x00".to_xs               # null
-    assert_equal '*', "\x0C".to_xs               # form feed
-    assert_equal '*', "\xEF\xBF\xBF".to_xs       # U+FFFF
+    assert_equal REPLACEMENT_CHAR, "\x00".to_xs               # null
+    assert_equal REPLACEMENT_CHAR, "\x0C".to_xs               # form feed
+    assert_equal REPLACEMENT_CHAR, "\xEF\xBF\xBF".to_xs       # U+FFFF
   end
 
   def test_iso_8859_1
