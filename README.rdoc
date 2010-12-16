@@ -202,7 +202,7 @@ incompatibility are:
   Example:
 
     xml = Builder::Markup.new
-    xml.sample("Iñtërnâtiônàl")
+    xml.sample("I$-1¶Æt(5k(Brn¶¨ti¶Én¶¦l")-A
     xml.target!  =>
       "<sample>I&#241;t&#235;rn&#226;ti&#244;n&#224;l</sample>"
 
@@ -213,9 +213,9 @@ incompatibility are:
     $KCODE = 'UTF8'
     xml = Builder::Markup.new
     xml.instruct!(:xml, :encoding => "UTF-8")
-    xml.sample("Iñtërnâtiônàl")
+    xml.sample("I$-1¶Æt(5k(Brn¶¨ti¶Én¶¦l")-A
     xml.target!  =>
-      "<sample>Iñtërnâtiônàl</sample>"
+      "<sample>I$-1¶Æt(5k(Brn¶¨ti¶Én¶¦l</sample>"-A
 
 == Links
 
@@ -227,6 +227,6 @@ Bug Reports::    http://onestepback.org/cgi-bin/bugs.cgi?project=builder
 == Contact
 
 Author::         Jim Weirich
-Email::          jim@weirichhouse.org
+Email::          jim.weirich@gmail.com
 Home Page::      http://onestepback.org
 License::        MIT Licence (http://www.opensource.org/licenses/mit-license.html)
