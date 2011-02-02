@@ -89,6 +89,10 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def setup
+    if Object::const_defined?(:BasicObject) and respond_to?(:skip)
+      skip "BlankSlate is not used in this environment" 
+    end
+
     @bs = BlankSlate.new
   end
 
