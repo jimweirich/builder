@@ -132,7 +132,11 @@ module Builder
       end
     else
       def _escape(text)
-        text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+        begin
+          text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+        rescue
+          text.to_xs()
+        end
       end
     end
 
