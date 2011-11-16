@@ -11,6 +11,10 @@ module Builder
   # Builder::XmlMarkup and Builder::XmlEvents for examples.
   class XmlBase < BlankSlate
     
+    class << self
+      attr_accessor :cache_method_calls
+    end
+    
     # Create an XML markup builder.
     #
     # out::      Object receiving the markup.  +out+ must respond to
@@ -73,11 +77,12 @@ module Builder
       end
       @target
     end
-
+    
     # Create XML markup based on the name of the method.  This method
     # is never invoked directly, but is called for each markup method
-    # in the markup block.
+    # in the markup block that isn't cached.
     def method_missing(sym, *args, &block)
+      cache_method_call(sym) if XmlBase.cache_method_calls
       tag!(sym, *args, &block)
     end
 
@@ -157,6 +162,22 @@ module Builder
     ensure
       @level -= 1
     end
+
+    # If XmlBase.cache_method_calls = true, we dynamicly create the method
+    # missed as an instance method on the XMLBase object. Because XML
+    # documents are usually very repetative in nature, the next node will
+    # be handled by the new method instead of method_missing. As
+    # method_missing is very slow, this speeds up document generation
+    # significantly.
+    def cache_method_call(sym)
+      instance_eval <<-NEW_METHOD
+        def #{sym.to_s}(*args, &block)
+          tag!(:#{sym.to_s}, *args, &block)
+        end
+      NEW_METHOD
+    end
   end
+  
+  XmlBase.cache_method_calls = true
   
 end
