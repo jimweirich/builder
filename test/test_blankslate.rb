@@ -58,7 +58,7 @@ end
 
 # Introduce some late methods (both module and direct) into the Object
 # class.
-class Object 
+class Object
   include LateObject
   def another_late_addition
     4321
@@ -82,17 +82,23 @@ end
 #
 class TestBlankSlate < Test::Unit::TestCase
   if Object::const_defined?(:BasicObject)
-    def self.suite
-      # skip tests if :BasicObject is present
-      Test::Unit::TestSuite.new(name)
+    def skipping?
+      true
+    end
+  else
+    def skipping?
+      false
     end
   end
 
   def setup
+    return if skipping?
+    @skip = Object::const_defined?(:BasicObject)
     @bs = BlankSlate.new
   end
 
   def test_undefined_methods_remain_undefined
+    return if skipping?
     assert_raise(NoMethodError) { @bs.no_such_method }
     assert_raise(NoMethodError) { @bs.nil? }
   end
@@ -101,6 +107,7 @@ class TestBlankSlate < Test::Unit::TestCase
   # NOTE: NameError is acceptable because the lack of a '.' means that
   # Ruby can't tell if it is a method or a local variable.
   def test_undefined_methods_remain_undefined_during_instance_eval
+    return if skipping?
     assert_raise(NoMethodError, NameError)  do
       @bs.instance_eval do nil? end
     end
@@ -110,62 +117,73 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_private_methods_are_undefined
+    return if skipping?
     assert_raise(NoMethodError) do
       @bs.puts "HI"
     end
   end
-  
+
   def test_targetted_private_methods_are_undefined_during_instance_eval
+    return if skipping?
     assert_raise(NoMethodError, NameError) do
       @bs.instance_eval do self.puts "HI" end
     end
   end
-  
+
   def test_untargetted_private_methods_are_defined_during_instance_eval
     oldstdout = $stdout
+    return if skipping?
     $stdout = StringIO.new
-    @bs.instance_eval do 
+    @bs.instance_eval do
       puts "HI"
     end
   ensure
     $stdout = oldstdout
   end
-  
+
   def test_methods_added_late_to_kernel_remain_undefined
+    return if skipping?
     assert_equal 1234, nil.late_addition
     assert_raise(NoMethodError) { @bs.late_addition }
   end
 
   def test_methods_added_late_to_object_remain_undefined
+    return if skipping?
     assert_equal 4321, nil.another_late_addition
     assert_raise(NoMethodError) { @bs.another_late_addition }
   end
-  
+
   def test_methods_added_late_to_global_remain_undefined
+    return if skipping?
     assert_equal 42, global_inclusion
     assert_raise(NoMethodError) { @bs.global_inclusion }
   end
 
   def test_preload_method_added
+    return if skipping?
     assert Kernel.k_added_names.include?(:late_addition)
     assert Object.o_added_names.include?(:another_late_addition)
   end
 
   def test_method_defined_late_multiple_times_remain_undefined
+    return if skipping?
     assert_equal 22, nil.double_late_addition
     assert_raise(NoMethodError) { @bs.double_late_addition }
   end
 
   def test_late_included_module_in_object_is_ok
+    return if skipping?
     assert_equal 33, 1.late_object
     assert_raise(NoMethodError) { @bs.late_object }
   end
 
   def test_late_included_module_in_kernel_is_ok
+    return if skipping?
     assert_raise(NoMethodError) { @bs.late_kernel }
   end
 
   def test_revealing_previously_hidden_methods_are_callable
+    return if skipping?
     with_to_s = Class.new(BlankSlate) do
       reveal :to_s
     end
@@ -173,12 +191,13 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_revealing_previously_hidden_methods_are_callable_with_block
+    return if skipping?
     Object.class_eval <<-EOS
       def given_block(&block)
         block
-      end   
+      end
     EOS
-  
+
     with_given_block = Class.new(BlankSlate) do
       reveal :given_block
     end
@@ -186,6 +205,7 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_revealing_a_hidden_method_twice_is_ok
+    return if skipping?
     with_to_s = Class.new(BlankSlate) do
       reveal :to_s
       reveal :to_s
@@ -194,6 +214,7 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_revealing_unknown_hidden_method_is_an_error
+    return if skipping?
     assert_raises(RuntimeError) do
       Class.new(BlankSlate) do
         reveal :xyz
@@ -202,6 +223,7 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_global_includes_still_work
+    return if skipping?
     assert_nothing_raised do
       assert_equal 42, global_inclusion
       assert_equal 42, Object.new.global_inclusion
@@ -211,6 +233,7 @@ class TestBlankSlate < Test::Unit::TestCase
   end
 
   def test_reveal_should_not_bind_to_an_instance
+    return if skipping?
     with_object_id = Class.new(BlankSlate) do
       reveal(:object_id)
     end
@@ -218,7 +241,7 @@ class TestBlankSlate < Test::Unit::TestCase
     obj1 = with_object_id.new
     obj2 = with_object_id.new
 
-    assert obj1.object_id != obj2.object_id, 
+    assert obj1.object_id != obj2.object_id,
        "Revealed methods should not be bound to a particular instance"
   end
 end
