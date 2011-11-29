@@ -1,3 +1,4 @@
+# coding: UTF-8
 = Project: Builder
 
 == Goal
@@ -202,7 +203,7 @@ incompatibility are:
   Example:
 
     xml = Builder::Markup.new
-    xml.sample("I$-1∂∆t(5k(Brn∂®ti∂…n∂¶l")-A
+    xml.sample("I$-1¬∂√Üt(5k(Brn¬∂¬®ti¬∂√ân¬∂¬¶l")-A
     xml.target!  =>
       "<sample>I&#241;t&#235;rn&#226;ti&#244;n&#224;l</sample>"
 
@@ -213,9 +214,9 @@ incompatibility are:
     $KCODE = 'UTF8'
     xml = Builder::Markup.new
     xml.instruct!(:xml, :encoding => "UTF-8")
-    xml.sample("I$-1∂∆t(5k(Brn∂®ti∂…n∂¶l")-A
+    xml.sample("I√±t√´rn√¢ti√¥n√†l")
     xml.target!  =>
-      "<sample>I$-1∂∆t(5k(Brn∂®ti∂…n∂¶l</sample>"-A
+      "<sample>I√±t√´rn√¢ti√¥n√†l</sample>"
 
 == Links
 
