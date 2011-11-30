@@ -21,14 +21,5 @@ class TestMethodCaching < Test::Unit::TestCase
     assert xml.respond_to?(:cache_me)
   end
 
-  def test_method_call_caching_disabled
-    Builder::XmlBase.cache_method_calls = false
-    xml = Builder::XmlMarkup.new
-    xml.do_not_cache_me
-    assert ! defined? xml.do_not_cache_me
-
-    Builder::XmlBase.cache_method_calls = true    
-  end
-
 end
 
