@@ -52,6 +52,7 @@ rd = Rake::RDocTask.new("rdoc") { |rdoc|
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
   rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc')
+  rdoc.rdoc_files.exclude('TAGS')
   rdoc.template = 'doc/jamis.rb'
 }
 
