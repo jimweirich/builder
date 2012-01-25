@@ -134,7 +134,12 @@ module Builder
       end
     else
       def _escape(text)
-        text.to_xs((@encoding != 'utf-8' or $KCODE != 'UTF8'))
+        # original_xs is defined by activesupport when fast_xs is
+        # loaded; since fast_xs (as of version 0.8.0) does not accept
+        # the encode parameter, use the original function if present.
+        toxs_method = ::String.method_defined?(:original_xs) ? :original_xs : :to_xs
+
+        text.send(toxs_method, (@encoding != 'utf-8' or $KCODE != 'UTF8'))
       end
     end
 
