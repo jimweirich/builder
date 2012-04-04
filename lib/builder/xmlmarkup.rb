@@ -263,7 +263,7 @@ module Builder
     #
     def cdata!(text)
       _ensure_no_block ::Kernel::block_given?
-      _special("<![CDATA[", "]]>", text, nil)
+      _special("<![CDATA[", "]]>", text.gsub(']]>', ']]]]><![CDATA[>'), nil)
     end
     
     private
