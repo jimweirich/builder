@@ -34,6 +34,16 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal "<value>hi</value>", @xml.target!
   end
 
+  def test_empty_value
+    @xml.value("")
+    assert_equal "<value/>", @xml.target!
+  end
+
+  def test_nil_value
+    @xml.value(nil)
+    assert_equal "<value/>", @xml.target!
+  end
+
   def test_nested
     @xml.outer { |x| x.inner("x") }
     assert_equal "<outer><inner>x</inner></outer>", @xml.target!
@@ -78,7 +88,7 @@ class TestMarkup < Test::Unit::TestCase
     @xml.a("link", :href=>"http://onestepback.org")
     assert_equal %{<a href="http://onestepback.org">link</a>}, @xml.target!
   end
-  
+
   def test_complex
     @xml.body(:bg=>"#ffffff") { |x|
       x.title("T", :style=>"red")
@@ -114,9 +124,9 @@ class TestMarkup < Test::Unit::TestCase
 
   def test_append_text
     @xml.p { |x| x.br; x.text! "HI" }
-    assert_equal "<p><br/>HI</p>", @xml.target!    
+    assert_equal "<p><br/>HI</p>", @xml.target!
   end
-  
+
   def test_ambiguous_markup
     ex = assert_raise(ArgumentError) {
       @xml.h1("data1") { b }
@@ -207,7 +217,7 @@ class TestNameSpaces < Test::Unit::TestCase
   def test_long
     xml = Builder::XmlMarkup.new(:indent=>2)
     xml.instruct!
-    xml.rdf :RDF, 
+    xml.rdf :RDF,
       "xmlns:rdf" => :"&rdf;",
       "xmlns:rdfs" => :"&rdfs;",
       "xmlns:xsd" => :"&xsd;",
@@ -227,7 +237,7 @@ class TestNameSpaces < Test::Unit::TestCase
     assert_match /xmlns:rdf="&rdf;"/m, xml.target!
     assert_match /<owl:Restriction>/m, xml.target!
   end
-  
+
   def test_ensure
     xml = Builder::XmlMarkup.new
     xml.html do
@@ -527,7 +537,7 @@ class TestIndentedXmlMarkup < Test::Unit::TestCase
       def initialize
 	@events = []
       end
-      
+
       def start_tag(sym, attrs)
 	@events << [:start, sym, attrs]
       end
