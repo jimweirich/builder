@@ -136,20 +136,21 @@ module Builder
       end
     end
 
-    def _escape_quote(text)
-      _escape(text).gsub(%r{"}, '&quot;')  # " WART
+    def _escape_attribute(text)
+      _escape(text).gsub("\n", "&#10;").gsub("\r", "&#13;").
+        gsub(%r{"}, '&quot;') # " WART
     end
 
     def _newline
       return if @indent == 0
       text! "\n"
     end
-    
+
     def _indent
       return if @indent == 0 || @level == 0
       text!(" " * (@level * @indent))
     end
-    
+
     def _nested_structures(block)
       @level += 1
       block.call(self)
