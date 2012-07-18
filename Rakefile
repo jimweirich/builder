@@ -64,7 +64,7 @@ PKG_FILES = FileList[
   'test/**/*.rb',
   'scripts/**/*.rb'
 ]
-PKG_FILES.exclude('test/testcssbuilder.rb')
+PKG_FILES.exclude('test/test_cssbuilder.rb')
 PKG_FILES.exclude('lib/builder/css.rb')
 
 BLANKSLATE_FILES = FileList[
