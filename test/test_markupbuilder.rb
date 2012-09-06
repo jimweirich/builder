@@ -137,8 +137,8 @@ class TestMarkup < Test::Unit::TestCase
     ex = assert_raise(ArgumentError) {
       @xml.h1("data1") { b }
     }
-    assert_match /\btext\b/, ex.message
-    assert_match /\bblock\b/, ex.message
+    assert_match(/\btext\b/, ex.message)
+    assert_match(/\bblock\b/, ex.message)
   end
 
   def test_capitalized_method
@@ -238,10 +238,10 @@ class TestNameSpaces < Test::Unit::TestCase
 	end
       end
     end
-    assert_match /^<\?xml/, xml.target!
-    assert_match /\n<rdf:RDF/m, xml.target!
-    assert_match /xmlns:rdf="&rdf;"/m, xml.target!
-    assert_match /<owl:Restriction>/m, xml.target!
+    assert_match(/^<\?xml/, xml.target!)
+    assert_match(/\n<rdf:RDF/m, xml.target!)
+    assert_match(/xmlns:rdf="&rdf;"/m, xml.target!)
+    assert_match(/<owl:Restriction>/m, xml.target!)
   end
 
   def test_ensure
@@ -352,17 +352,17 @@ class TestSpecialMarkup < Test::Unit::TestCase
 
   def test_xml_instruct
     @xml.instruct!
-    assert_match /^<\?xml version="1.0" encoding="UTF-8"\?>$/, @xml.target!
+    assert_match(/^<\?xml version="1.0" encoding="UTF-8"\?>$/, @xml.target!)
   end
 
   def test_xml_instruct_with_overrides
     @xml.instruct! :xml, :encoding=>"UCS-2"
-    assert_match /^<\?xml version="1.0" encoding="UCS-2"\?>$/, @xml.target!
+    assert_match(/^<\?xml version="1.0" encoding="UCS-2"\?>$/, @xml.target!)
   end
 
   def test_xml_instruct_with_standalong
     @xml.instruct! :xml, :encoding=>"UCS-2", :standalone=>"yes"
-    assert_match /^<\?xml version="1.0" encoding="UCS-2" standalone="yes"\?>$/, @xml.target!
+    assert_match(/^<\?xml version="1.0" encoding="UCS-2" standalone="yes"\?>$/, @xml.target!)
   end
 
   def test_no_blocks
