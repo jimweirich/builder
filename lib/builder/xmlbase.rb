@@ -128,7 +128,9 @@ module Builder
       def _escape(text)
         result = XChar.encode(text)
         begin
-          result.encode(@encoding)
+          encoding = ::Encoding::find(@encoding)
+          raise Exception if encoding.dummy?
+          result.encode(encoding)
         rescue
           # if the encoding can't be supported, use numeric character references
           result.

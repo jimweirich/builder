@@ -467,10 +467,16 @@ class TestIndentedXmlMarkup < Test::Unit::TestCase
       end
     end
 
-    # PENDING: Until we figure out how to gsub on non-UTF-8 text.
-    def xtest_use_entities_if_kcode_is_utf_but_encoding_is_something_else
+    def test_use_entities_if_kcode_is_utf_but_encoding_is_dummy_encoding
       xml = Builder::XmlMarkup.new
       xml.instruct!(:xml, :encoding => 'UTF-16')
+      xml.p(encode("\xE2\x80\x99", 'UTF8'))
+      assert_match(%r(<p>&#8217;</p>), xml.target!) #
+    end
+
+    def test_use_entities_if_kcode_is_utf_but_encoding_is_unsupported_encoding
+      xml = Builder::XmlMarkup.new
+      xml.instruct!(:xml, :encoding => 'UCS-2')
       xml.p(encode("\xE2\x80\x99", 'UTF8'))
       assert_match(%r(<p>&#8217;</p>), xml.target!) #
     end
