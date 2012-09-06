@@ -79,6 +79,12 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal %{<a href="http://onestepback.org">link</a>}, @xml.target!
   end
 
+  def test_attributes_with_newlines
+    @xml.abbr("W3C", :title=>"World\nWide\rWeb\r\nConsortium")
+    assert_equal %{<abbr title="World&#10;Wide&#13;Web&#13;&#10;Consortium">W3C</abbr>},
+      @xml.target!
+  end
+
   def test_complex
     @xml.body(:bg=>"#ffffff") { |x|
       x.title("T", :style=>"red")
