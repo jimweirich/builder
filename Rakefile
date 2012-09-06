@@ -53,7 +53,7 @@ rd = RDoc::Task.new("rdoc") { |rdoc|
   rdoc.rdoc_dir = 'html'
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
-  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc').exclude("TAGS")
   rdoc.template = 'doc/jamis.rb'
 }
 
