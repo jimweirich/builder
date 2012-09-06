@@ -179,20 +179,6 @@ rescue LoadError
   # No rcov available
 end
 
-# Tags file ----------------------------------------------------------
-
-namespace "tags" do
-  desc "Create a TAGS file"
-  task :emacs => "TAGS"
-
-  TAGS = ENV['TAGS'] || 'ctags'
-
-  file "TAGS" => SRC_RB do
-    puts "Making TAGS"
-    sh "#{TAGS} -e #{SRC_RB}", :verbose => false
-  end
-end
-
 # --------------------------------------------------------------------
 # Creating a release
 
