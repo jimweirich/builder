@@ -15,20 +15,42 @@ require 'builder'
 
 class TestMethodCaching < Test::Unit::TestCase
 
+  # We can directly ask if xml object responds to the cache_me or
+  # do_not_cache_me methods because xml is derived from BasicObject
+  # (and repond_to? is not defined in BasicObject).
+  #
+  # Instead we are going to stub out method_missing so that it throws
+  # an error, and then make sure that error is either thrown or not
+  # thrown as appropriate.
+
+  def teardown
+    super
+    Builder::XmlBase.cache_method_calls = true
+  end
+
   def test_method_call_caching
     xml = Builder::XmlMarkup.new
     xml.cache_me
-    assert xml.respond_to?(:cache_me)
+
+    def xml.method_missing(*args)
+      ::Kernel.fail StandardError, "SHOULD NOT BE CALLED"
+    end
+    assert_nothing_raised do
+      xml.cache_me
+    end
   end
 
   def test_method_call_caching_disabled
     Builder::XmlBase.cache_method_calls = false
     xml = Builder::XmlMarkup.new
     xml.do_not_cache_me
-    assert ! defined? xml.do_not_cache_me
 
-    Builder::XmlBase.cache_method_calls = true    
+    def xml.method_missing(*args)
+      ::Kernel.fail StandardError, "SHOULD BE CALLED"
+    end
+    assert_raise(StandardError, /SHOULD BE CALLED/) do
+      xml.do_not_cache_me
+    end
   end
 
 end
-
