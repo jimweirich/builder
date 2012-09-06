@@ -1,5 +1,18 @@
 = Change Log
 
+== Version 3.1.0
+
+* Included the to_xs arity patch needed for weird Rails compatibility
+  issue.
+
+* Escaping newlines in attributes now.
+
+* Allow method caching
+
+== Version 3.0.0
+
+* Ruby 1.9 compatiblity issues.
+
 == Version 2.2.0
 
 * Applied patch from Thijs van der Vossen to allow UTF-8 encoded
@@ -86,4 +99,3 @@ Bug fix.
 == Version 0.1.0
 
 Initial version release.
-
