@@ -20,8 +20,9 @@ end
 # Determine the current version of the software
 
 CLOBBER.include('pkg')
+CLEAN.include('pkg/builder-*').include('pkg/blankslate-*').exclude('pkg/*.gem')
 
-CURRENT_VERSION = '3.0.0'
+CURRENT_VERSION = '3.1.0'
 PKG_VERSION = ENV['REL'] ? ENV['REL'] : CURRENT_VERSION
 
 SRC_RB = FileList['lib/**/*.rb']
@@ -183,11 +184,11 @@ namespace "tags" do
   desc "Create a TAGS file"
   task :emacs => "TAGS"
 
-  TAGS = 'xctags -e'
+  TAGS = ENV['TAGS'] || 'ctags'
 
   file "TAGS" => SRC_RB do
-    puts "Makings TAGS"
-    sh "#{TAGS} #{SRC_RB}", :verbose => false
+    puts "Making TAGS"
+    sh "#{TAGS} -e #{SRC_RB}", :verbose => false
   end
 end
 
