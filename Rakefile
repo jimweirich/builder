@@ -17,13 +17,14 @@ rescue Exception
   nil
 end
 
+require './lib/builder/version'
+
 # Determine the current version of the software
 
 CLOBBER.include('pkg')
 CLEAN.include('pkg/builder-*').include('pkg/blankslate-*').exclude('pkg/*.gem')
 
-CURRENT_VERSION = '3.1.0'
-PKG_VERSION = ENV['REL'] ? ENV['REL'] : CURRENT_VERSION
+PKG_VERSION = Builder::VERSION
 
 SRC_RB = FileList['lib/**/*.rb']
 
