@@ -38,7 +38,7 @@ module Builder
       text = nil
       attrs = nil
       sym = "#{sym}:#{args.shift}" if args.first.kind_of?(::Symbol)
-      sym = sym.to_sym unless sym.class == Symbol
+      sym = sym.to_sym unless sym.class == ::Symbol
       args.each do |arg|
         case arg
         when ::Hash
@@ -82,7 +82,7 @@ module Builder
     # is never invoked directly, but is called for each markup method
     # in the markup block that isn't cached.
     def method_missing(sym, *args, &block)
-      cache_method_call(sym) if XmlBase.cache_method_calls
+      cache_method_call(sym) if ::Builder::XmlBase.cache_method_calls
       tag!(sym, *args, &block)
     end
 
