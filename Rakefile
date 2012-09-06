@@ -160,8 +160,6 @@ task :remove_tags do
   rm "TAGS" rescue nil
 end
 
-
-
 # RCov ---------------------------------------------------------------
 begin
   require 'rcov/rcovtask'
@@ -179,100 +177,6 @@ begin
   end
 rescue LoadError
   # No rcov available
-end
-
-# --------------------------------------------------------------------
-# Creating a release
-
-def announce(msg='')
-  STDERR.puts msg
-end
-
-desc "Make a new release"
-task :release => [
-  :prerelease,
-  :clobber,
-  :test_all,
-  :update_version,
-  :package,
-  :tag] do
-
-  announce
-  announce "**************************************************************"
-  announce "* Release #{PKG_VERSION} Complete."
-  announce "* Packages ready to upload."
-  announce "**************************************************************"
-  announce
-end
-
-# Validate that everything is ready to go for a release.
-task :prerelease do
-  announce
-  announce "**************************************************************"
-  announce "* Making RubyGem Release #{PKG_VERSION}"
-  announce "* (current version #{CURRENT_VERSION})"
-  announce "**************************************************************"
-  announce
-
-  # Is a release number supplied?
-  unless ENV['REL']
-    fail "Usage: rake release REL=x.y.z [REUSE=tag_suffix]"
-  end
-
-  # Is the release different than the current release.
-  # (or is REUSE set?)
-  if PKG_VERSION == CURRENT_VERSION && ! ENV['REUSE']
-    fail "Current version is #{PKG_VERSION}, must specify REUSE=tag_suffix to reuse version"
-  end
-
-  # Are all source files checked in?
-  if ENV['RELTEST']
-    announce "Release Task Testing, skipping checked-in file test"
-  else
-    announce "Checking for unchecked-in files..."
-    data = `cvs -q update`
-    unless data =~ /^$/
-      fail "CVS update is not clean ... do you have unchecked-in files?"
-    end
-    announce "No outstanding checkins found ... OK"
-  end
-end
-
-task :update_version => [:prerelease] do
-  if PKG_VERSION == CURRENT_VERSION
-    announce "No version change ... skipping version update"
-  else
-    announce "Updating Builder version to #{PKG_VERSION}"
-    open("Rakefile") do |rakein|
-      open("Rakefile.new", "w") do |rakeout|
-	rakein.each do |line|
-	  if line =~ /^CURRENT_VERSION\s*=\s*/
-	    rakeout.puts "CURRENT_VERSION = '#{PKG_VERSION}'"
-	  else
-	    rakeout.puts line
-	  end
-	end
-      end
-    end
-    mv "Rakefile.new", "Rakefile"
-    if ENV['RELTEST']
-      announce "Release Task Testing, skipping commiting of new version"
-    else
-      sh "cvs commit -m \"Updated to version #{PKG_VERSION}\" Rakefile"
-    end
-  end
-end
-
-desc "Tag all the CVS files with the latest release number (REL=x.y.z)"
-task :tag => [:prerelease] do
-  reltag = "REL_#{PKG_VERSION.gsub(/\./, '_')}"
-  reltag << ENV['REUSE'].gsub(/\./, '_') if ENV['REUSE']
-  announce "Tagging CVS with [#{reltag}]"
-  if ENV['RELTEST']
-    announce "Release Task Testing, skipping CVS tagging"
-  else
-    sh %{cvs tag #{reltag}}
-  end
 end
 
 desc "Install the jamis RDoc template"
