@@ -64,7 +64,7 @@ module Builder
           _end_tag(sym)
           _newline
         end
-      elsif text.nil?
+      elsif text.nil? || text.empty?
         _indent
         _start_tag(sym, attrs, true)
         _newline

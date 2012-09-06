@@ -34,6 +34,16 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal "<value>hi</value>", @xml.target!
   end
 
+  def test_empty_value
+    @xml.value("")
+    assert_equal "<value/>", @xml.target!
+  end
+
+  def test_nil_value
+    @xml.value(nil)
+    assert_equal "<value/>", @xml.target!
+  end
+
   def test_nested
     @xml.outer { |x| x.inner("x") }
     assert_equal "<outer><inner>x</inner></outer>", @xml.target!
