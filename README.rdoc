@@ -200,13 +200,6 @@ incompatibility are:
   Builder correctly translates UTF-8 characters into valid XML.  (New
   in version 2.0.0).  Thanks to Sam Ruby for the translation code.
 
-  Example:
-
-    xml = Builder::Markup.new
-    xml.sample("I$-1¶Æt(5k(Brn¶¨ti¶Én¶¦l")-A
-    xml.target!  =>
-      "<sample>I&#241;t&#235;rn&#226;ti&#244;n&#224;l</sample>"
-
   You can get UTF-8 encoded output by making sure that the XML
   encoding is set to "UTF-8" and that the $KCODE variable is set to
   "UTF8".
