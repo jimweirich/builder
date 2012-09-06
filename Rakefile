@@ -9,10 +9,10 @@
 
 require 'rake/clean'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 begin
   require 'rubygems'
-  require 'rake/gempackagetask'
+  require 'rubygems/package_task'
 rescue Exception
   nil
 end
@@ -47,7 +47,7 @@ end
 
 # Create a task to build the RDOC documentation tree.
 
-rd = Rake::RDocTask.new("rdoc") { |rdoc|
+rd = RDoc::Task.new("rdoc") { |rdoc|
   rdoc.rdoc_dir = 'html'
   rdoc.title    = "Builder for Markup"
   rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
@@ -92,7 +92,6 @@ simple to do.  Currently the following builder objects are supported:
 
     s.files = PKG_FILES.to_a
     s.require_path = 'lib'
-    s.autorequire = 'builder'
 
     s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
 
@@ -123,7 +122,6 @@ classes that make heavy use of method_missing.
 
     s.files = BLANKSLATE_FILES.to_a
     s.require_path = 'lib'
-    s.autorequire = 'builder'
 
     s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
 
@@ -140,13 +138,13 @@ classes that make heavy use of method_missing.
   end
 
   namespace 'builder' do
-    Rake::GemPackageTask.new(spec) do |t|
+    Gem::PackageTask.new(spec) do |t|
       t.need_tar = true
     end
   end
 
   namespace 'blankslate' do
-    Rake::GemPackageTask.new(blankslate_spec) do |t|
+    Gem::PackageTask.new(blankslate_spec) do |t|
       t.need_tar = true
     end
   end
