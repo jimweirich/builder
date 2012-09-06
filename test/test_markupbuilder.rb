@@ -383,6 +383,11 @@ class TestSpecialMarkup < Test::Unit::TestCase
     @xml.cdata!("TEST&CHECK")
     assert_equal "<![CDATA[TEST&CHECK]]>\n", @xml.target!
   end
+
+  def test_cdata_with_included_close
+    @xml.cdata!("TEST]]>CHECK")
+    assert_equal "<![CDATA[TEST]]]]><![CDATA[>CHECK]]>\n", @xml.target!
+  end
 end
 
 class TestIndentedXmlMarkup < Test::Unit::TestCase
