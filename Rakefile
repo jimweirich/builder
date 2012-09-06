@@ -67,6 +67,7 @@ PKG_FILES = FileList[
 ]
 PKG_FILES.exclude('test/test_cssbuilder.rb')
 PKG_FILES.exclude('lib/builder/css.rb')
+PKG_FILES.exclude('TAGS')
 
 BLANKSLATE_FILES = FileList[
   'lib/blankslate.rb',
@@ -104,7 +105,7 @@ simple to do.  Currently the following builder objects are supported:
       '--line-numbers'
 
     s.author = "Jim Weirich"
-    s.email = "jim@weirichhouse.org"
+    s.email = "jim.weirich@gmail.com"
     s.homepage = "http://onestepback.org"
     s.license = 'MIT'
   end
@@ -135,29 +136,30 @@ classes that make heavy use of method_missing.
       '--line-numbers'
 
     s.author = "Jim Weirich"
-    s.email = "jim@weirichhouse.org"
+    s.email = "jim.weirich@gmail.com"
     s.homepage = "http://onestepback.org"
+    s.license = 'MIT'
   end
 
   namespace 'builder' do
     Gem::PackageTask.new(spec) do |t|
-      t.need_tar = true
+      t.need_tar = false
     end
   end
 
   namespace 'blankslate' do
     Gem::PackageTask.new(blankslate_spec) do |t|
-      t.need_tar = true
+      t.need_tar = false
     end
   end
 
-  task :package => ['builder:package', 'blankslate:package']
+  task :package => [:remove_tags, 'builder:package', 'blankslate:package']
 end
 
-desc "Look for Debugging print lines"
-task :dbg do
-  FileList['**/*.rb'].egrep /\bDBG|\bbreakpoint\b/
+task :remove_tags do
+  rm "TAGS" rescue nil
 end
+
 
 
 # RCov ---------------------------------------------------------------
