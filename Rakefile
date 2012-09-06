@@ -106,6 +106,7 @@ simple to do.  Currently the following builder objects are supported:
     s.author = "Jim Weirich"
     s.email = "jim@weirichhouse.org"
     s.homepage = "http://onestepback.org"
+    s.license = 'MIT'
   end
 
   blankslate_spec = Gem::Specification.new do |s|
