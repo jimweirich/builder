@@ -22,7 +22,7 @@ end
 CLOBBER.include('pkg')
 CLEAN.include('pkg/builder-*').include('pkg/blankslate-*').exclude('pkg/*.gem')
 
-CURRENT_VERSION = '3.1.0'
+CURRENT_VERSION = '3.0.1'
 PKG_VERSION = ENV['REL'] ? ENV['REL'] : CURRENT_VERSION
 
 SRC_RB = FileList['lib/**/*.rb']
