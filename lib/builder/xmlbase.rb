@@ -10,11 +10,11 @@ module Builder
   # XmlBase is a base class for building XML builders.  See
   # Builder::XmlMarkup and Builder::XmlEvents for examples.
   class XmlBase < BlankSlate
-    
+
     class << self
       attr_accessor :cache_method_calls
     end
-    
+
     # Create an XML markup builder.
     #
     # out::      Object receiving the markup.  +out+ must respond to
@@ -30,7 +30,7 @@ module Builder
       @level  = initial
       @encoding = encoding.downcase
     end
-    
+
     # Create a tag named +sym+.  Other than the first argument which
     # is the tag name, the arguments are the same as the tags
     # implemented via <tt>method_missing</tt>.
@@ -77,7 +77,7 @@ module Builder
       end
       @target
     end
-    
+
     # Create XML markup based on the name of the method.  This method
     # is never invoked directly, but is called for each markup method
     # in the markup block that isn't cached.
@@ -93,7 +93,7 @@ module Builder
     def text!(text)
       _text(_escape(text))
     end
-    
+
     # Append text to the output target without escaping any markup.
     # May be used within the markup brackets as:
     #
@@ -110,7 +110,7 @@ module Builder
     def <<(text)
       _text(text)
     end
-    
+
     # For some reason, nil? is sent to the XmlMarkup object.  If nil?
     # is not defined and method_missing is invoked, some strange kind
     # of recursion happens.  Since nil? won't ever be an XML tag, it
@@ -122,7 +122,7 @@ module Builder
     end
 
     private
-    
+
     require 'builder/xchar'
     if ::String.method_defined?(:encode)
       def _escape(text)
@@ -150,12 +150,12 @@ module Builder
       return if @indent == 0
       text! "\n"
     end
-    
+
     def _indent
       return if @indent == 0 || @level == 0
       text!(" " * (@level * @indent))
     end
-    
+
     def _nested_structures(block)
       @level += 1
       block.call(self)
@@ -177,7 +177,7 @@ module Builder
       NEW_METHOD
     end
   end
-  
+
   XmlBase.cache_method_calls = true
-  
+
 end
