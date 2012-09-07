@@ -177,11 +177,11 @@ module Builder
     # method_missing is very slow, this speeds up document generation
     # significantly.
     def cache_method_call(sym)
-      instance_eval <<-NEW_METHOD
-        def #{sym.to_s}(*args, &block)
-          tag!(:#{sym.to_s}, *args, &block)
+      class << self; self; end.class_eval do
+        define_method(sym) do |*args, &block|
+          tag!(sym, *args, &block)
         end
-      NEW_METHOD
+      end
     end
   end
 

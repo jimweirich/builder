@@ -28,6 +28,12 @@ class TestMethodCaching < Test::Unit::TestCase
     Builder::XmlBase.cache_method_calls = true
   end
 
+  def test_caching_does_not_break_weird_symbols
+    xml = Builder::XmlMarkup.new
+    xml.__send__("work-order", 1)
+    assert_equal "<work-order>1</work-order>", xml.target!
+  end
+
   def test_method_call_caching
     xml = Builder::XmlMarkup.new
     xml.cache_me
