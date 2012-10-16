@@ -44,6 +44,7 @@ module Builder
         when ::Hash
           attrs ||= {}
           attrs.merge!(arg)
+        when nil
         else
           text ||= ''
           text << arg.to_s
@@ -64,7 +65,7 @@ module Builder
           _end_tag(sym)
           _newline
         end
-      elsif text.nil? || text.empty?
+      elsif text.nil?
         _indent
         _start_tag(sym, attrs, true)
         _newline

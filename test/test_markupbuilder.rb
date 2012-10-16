@@ -36,7 +36,7 @@ class TestMarkup < Test::Unit::TestCase
 
   def test_empty_value
     @xml.value("")
-    assert_equal "<value/>", @xml.target!
+    assert_equal "<value></value>", @xml.target!
   end
 
   def test_nil_value
