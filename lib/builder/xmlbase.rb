@@ -180,8 +180,10 @@ module Builder
     # significantly.
     def cache_method_call(sym)
       class << self; self; end.class_eval do
-        define_method(sym) do |*args, &block|
-          tag!(sym, *args, &block)
+        unless method_defined?(sym)
+          define_method(sym) do |*args, &block|
+            tag!(sym, *args, &block)
+          end
         end
       end
     end
