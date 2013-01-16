@@ -52,7 +52,6 @@ module Builder
           attrs ||= {}
           attrs.merge!(arg)
         when nil
-          # do nothing
           attrs ||= {}
           attrs.merge!({nil: true}) if explicit_nil_handling?
         else
