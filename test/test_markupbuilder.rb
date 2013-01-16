@@ -155,6 +155,22 @@ class TestMarkup < Test::Unit::TestCase
     @xml.div { |x| x.text! "<hi>"; x.em("H&R Block") }
     assert_equal %{<div>&lt;hi&gt;<em>H&amp;R Block</em></div>}, @xml.target!
   end
+  def test_explicit_nil_handling
+    b = Builder::XmlMarkup.new explicit_nil_handling: true
+    b.tag! "foo", nil
+    assert_equal %{<foo nil="true"/>}, b.target!
+
+    b = Builder::XmlMarkup.new explicit_nil_handling: true
+    b.div("ns:xml"=>:"&xml;") { |x| x << "<h&i>"; x.em("H&R Block") }
+    assert_equal %{<div ns:xml="&xml;"><h&i><em>H&amp;R Block</em></div>}, b.target!
+
+    b = Builder::XmlMarkup.new explicit_nil_handling: true
+    n = 3
+    b.ol { |x| n.times { x.li(n) } }
+    assert_equal "<ol><li>3</li><li>3</li><li>3</li></ol>", b.target!
+
+
+  end
 
   def test_non_escaping
     @xml.div("ns:xml"=>:"&xml;") { |x| x << "<h&i>"; x.em("H&R Block") }

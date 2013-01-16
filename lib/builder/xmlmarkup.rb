@@ -186,6 +186,7 @@ module Builder
     def initialize(options={})
       indent = options[:indent] || 0
       margin = options[:margin] || 0
+      @explicit_nil_handling = options[:explicit_nil_handling] || false
       super(indent, margin)
       @target = options[:target] || ""
     end
