@@ -30,6 +30,13 @@ module Builder
       @level  = initial
       @encoding = encoding.downcase
     end
+    def explicit_nil_handling?
+       if  @explicit_nil_handling == true
+         true
+       else
+         false
+       end
+    end
 
     # Create a tag named +sym+.  Other than the first argument which
     # is the tag name, the arguments are the same as the tags
@@ -45,7 +52,8 @@ module Builder
           attrs ||= {}
           attrs.merge!(arg)
         when nil
-          # do nothing
+          attrs ||= {}
+          attrs.merge!({nil: true}) if explicit_nil_handling?
         else
           text ||= ''
           text << arg.to_s
