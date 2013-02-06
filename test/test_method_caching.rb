@@ -54,7 +54,7 @@ class TestMethodCaching < Test::Unit::TestCase
     def xml.method_missing(*args)
       ::Kernel.fail StandardError, "SHOULD BE CALLED"
     end
-    assert_raise(StandardError, /SHOULD BE CALLED/) do
+    assert_raise(StandardError, "SHOULD BE CALLED") do
       xml.do_not_cache_me
     end
   end
