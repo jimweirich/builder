@@ -47,7 +47,7 @@ module Builder
   # == Notes:
   #
   # * The order that attributes are inserted in markup tags is
-  #   undefined. 
+  #   undefined.
   #
   # * Sometimes you wish to insert text without enclosing tags.  Use
   #   the <tt>text!</tt> method to accomplish this.
@@ -78,7 +78,7 @@ module Builder
   #   <tt>tag!</tt> will also take text and attribute arguments (after
   #   the tag name) like normal markup methods.  (But see the next
   #   bullet item for a better way to handle XML namespaces).
-  #   
+  #
   # * Direct support for XML namespaces is now available.  If the
   #   first argument to a tag call is a symbol, it will be joined to
   #   the tag to produce a namespace:tag combination.  It is easier to
@@ -93,7 +93,7 @@ module Builder
   # * XmlMarkup builds the markup in any object (called a _target_)
   #   that accepts the <tt><<</tt> method.  If no target is given,
   #   then XmlMarkup defaults to a string target.
-  # 
+  #
   #   Examples:
   #
   #     xm = Builder::XmlMarkup.new
@@ -110,7 +110,7 @@ module Builder
   #     xm = Builder::XmlMarkup.new
   #     x2 = Builder::XmlMarkup.new(:target=>xm)
   #     # Markup written to +x2+ will be send to +xm+.
-  #   
+  #
   # * Indentation is enabled by providing the number of spaces to
   #   indent for each level as a second argument to XmlBuilder.new.
   #   Initial indentation may be specified using a third parameter.
@@ -119,7 +119,7 @@ module Builder
   #
   #     xm = Builder.new(:indent=>2)
   #     # xm will produce nicely formatted and indented XML.
-  #  
+  #
   #     xm = Builder.new(:indent=>2, :margin=>4)
   #     # xm will produce nicely formatted and indented XML with 2
   #     # spaces per indent and an over all indentation level of 4.
@@ -166,15 +166,15 @@ module Builder
     #    Object receiving the markup.  +target_object+ must respond to
     #    the <tt><<(<em>a_string</em>)</tt> operator and return
     #    itself.  The default target is a plain string target.
-    #    
+    #
     # :indent=><em>indentation</em>::
     #    Number of spaces used for indentation.  The default is no
     #    indentation and no line breaks.
-    #    
+    #
     # :margin=><em>initial_indentation_level</em>::
     #    Amount of initial indentation (specified in levels, not
     #    spaces).
-    #    
+    #
     # :escape_attrs=><em>OBSOLETE</em>::
     #    The :escape_attrs option is no longer supported by builder
     #    (and will be quietly ignored).  String attribute values are
@@ -182,7 +182,7 @@ module Builder
     #    values (perhaps you are using entities in the attribute
     #    values), then give the value as a Symbol.  This allows much
     #    finer control over escaping attribute values.
-    #    
+    #
     def initialize(options={})
       indent = options[:indent] || 0
       margin = options[:margin] || 0
@@ -190,7 +190,7 @@ module Builder
       super(indent, margin)
       @target = options[:target] || ""
     end
-    
+
     # Return the target of the builder.
     def target!
       @target
@@ -266,7 +266,7 @@ module Builder
       _ensure_no_block ::Kernel::block_given?
       _special("<![CDATA[", "]]>", text.gsub(']]>', ']]]]><![CDATA[>'), nil)
     end
-    
+
     private
 
     # NOTE: All private methods of a builder object are prefixed when
@@ -276,8 +276,8 @@ module Builder
     def _text(text)
       @target << text
     end
-    
-    # Insert special instruction. 
+
+    # Insert special instruction.
     def _special(open, close, data=nil, attrs=nil, order=[])
       _indent
       @target << open
@@ -295,7 +295,7 @@ module Builder
       @target << "/" if end_too
       @target << ">"
     end
-    
+
     # Insert an ending tag.
     def _end_tag(sym)
       @target << "</#{sym}>"
