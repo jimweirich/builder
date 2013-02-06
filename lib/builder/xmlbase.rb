@@ -30,12 +30,9 @@ module Builder
       @level  = initial
       @encoding = encoding.downcase
     end
+
     def explicit_nil_handling?
-       if  @explicit_nil_handling == true
-         true
-       else
-         false
-       end
+      @explicit_nil_handling
     end
 
     # Create a tag named +sym+.  Other than the first argument which
