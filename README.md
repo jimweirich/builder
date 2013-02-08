@@ -250,9 +250,9 @@ incompatibility are:
 
 ## Contact
 
-| Title     | Value                  |
-| :----:    | :----:                 |
-| Author    | Jim Weirich            |
-| Email     | jim.weirich@gmail.com  |
-| Home Page | http://onestepback.org |
-| License   | MIT Licence (http://www.opensource.org/licenses/mit-license.html) |
+| Description | Value                  |
+| :----:      | :----:                 |
+| Author      | Jim Weirich            |
+| Email       | jim.weirich@gmail.com  |
+| Home Page   | http://onestepback.org |
+| License     | MIT Licence (http://www.opensource.org/licenses/mit-license.html) |
