@@ -1,33 +1,35 @@
-# coding: UTF-8
-= Project: Builder
+# Project: Builder
 
-== Goal
+## Goal
 
 Provide a simple way to create XML markup and data structures.
 
-== Classes
+## Classes
 
 Builder::XmlMarkup:: Generate XML markup notiation
 Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
 
-<b>Notes</b>::
+**Notes:**
 
 * An <tt>Builder::XmlTree</tt> class to generate XML tree
   (i.e. DOM-like) structures is also planned, but not yet implemented.
   Also, the events builder is currently lagging the markup builder in
   features.
 
-== Usage
+## Usage
 
+```ruby
   require 'rubygems'
   require_gem 'builder', '~> 2.0'
 
   builder = Builder::XmlMarkup.new
-  xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
+`  xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
   xml #=> <person><name>Jim</name><phone>555-1234</phone></person>
+```
 
 or
 
+```ruby
   require 'rubygems'
   require_gem 'builder'
 
@@ -39,10 +41,11 @@ or
   #   <name>Jim</name>
   #   <phone>555-1234</phone>
   # </person>
+```
 
-== Compatibility
+## Compatibility
 
-=== Version 2.0.0 Compatibility Changes
+### Version 2.0.0 Compatibility Changes
 
 Version 2.0.0 introduces automatically escaped attribute values for
 the first time.  Versions prior to 2.0.0 did not insert escape
@@ -66,12 +69,14 @@ as Symbol abuse, but the convention is convenient and flexible).
 
 Example:
 
+```ruby
   xml = Builder::XmlMarkup.new
   xml.sample(:escaped=>"This&That", :unescaped=>:"Here&amp;There")
   xml.target!  =>
     <sample escaped="This&amp;That" unescaped="Here&amp;There"/>
+```
 
-=== Version 1.0.0 Compatibility Changes
+### Version 1.0.0 Compatibility Changes
 
 Version 1.0.0 introduces some changes that are not backwards
 compatible with earlier releases of builder.  The main areas of
@@ -85,47 +90,59 @@ incompatibility are:
 * Builder must now be an explicit target for markup tags.  Instead of
   writing
 
+```ruby
     xml_markup = Builder::XmlMarkup.new
     xml_markup.div { strong("text") }
+```
 
   you need to write
 
+```ruby
     xml_markup = Builder::XmlMarkup.new
     xml_markup.div { xml_markup.strong("text") }
+```
 
 * The builder object is passed as a parameter to all nested markup
   blocks.  This allows you to create a short alias for the builder
   object that can be used within the block.  For example, the previous
   example can be written as:
 
+```ruby
     xml_markup = Builder::XmlMarkup.new
     xml_markup.div { |xml| xml.strong("text") }
+```
 
 * If you have both a pre-1.0 and a post-1.0 gem of builder installed,
   you can choose which version to use through the RubyGems
   +require_gem+ facility.
 
+```ruby
     require_gem 'builder', "~> 0.0"   # Gets the old version
     require_gem 'builder', "~> 1.0"   # Gets the new version
+```
 
-== Features
+## Features
 
 * XML Comments are supported ...
 
+```ruby
     xml_markup.comment! "This is a comment"
       #=>  <!-- This is a comment -->
+```
 
 * XML processing instructions are supported ...
 
+```ruby
     xml_markup.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
       #=>  <?xml version="1.0" encoding="UTF-8"?>
+```
 
   If the processing instruction is omitted, it defaults to "xml".
   When the processing instruction is "xml", the defaults attributes
   are:
 
-  <b>version</b>:: 1.0
-  <b>encoding</b>:: "UTF-8"
+  <b>version</b>: 1.0
+  <b>encoding</b>: "UTF-8"
 
   (NOTE: if the encoding is set to "UTF-8" and $KCODE is set to
   "UTF8", then Builder will emit UTF-8 encoded strings rather than
@@ -133,8 +150,10 @@ incompatibility are:
 
 * XML entity declarations are now supported to a small degree.
 
+```ruby
     xml_markup.declare! :DOCTYPE, :chapter, :SYSTEM, "../dtds/chapter.dtd"
       #=>  <!DOCTYPE chapter SYSTEM "../dtds/chapter.dtd">
+```
 
   The parameters to a declare! method must be either symbols or
   strings. Symbols are inserted without quotes, and strings are
@@ -147,11 +166,14 @@ incompatibility are:
 
   For example:
 
+```ruby
     xml_markup.declare! :ELEMENT, :chapter, :"(title,para+)"
       #=>  <!ELEMENT chapter (title,para+)>
+```
 
   Nested entity declarations are allowed.  For example:
 
+```ruby
     @xml_markup.declare! :DOCTYPE, :chapter do |x|
       x.declare! :ELEMENT, :chapter, :"(title,para+)"
       x.declare! :ELEMENT, :title, :"(#PCDATA)"
@@ -165,13 +187,16 @@ incompatibility are:
       <!ELEMENT title (#PCDATA)>
       <!ELEMENT para (#PCDATA)>
     ]>
+```
 
 * Some support for XML namespaces is now available.  If the first
   argument to a tag call is a symbol, it will be joined to the tag to
   produce a namespace:tag combination.  It is easier to show this than
   describe it.
 
+```ruby
    xml.SOAP :Envelope do ... end
+```
 
   Just put a space before the colon in a namespace to produce the
   right form for builder (e.g. "<tt>SOAP:Envelope</tt>" =>
@@ -190,10 +215,12 @@ incompatibility are:
 
   Example:
 
+```ruby
     xml = Builder::XmlMarkup.new
     xml.sample(:escaped=>"This&That", :unescaped=>:"Here&amp;There")
     xml.target!  =>
       <sample escaped="This&amp;That" unescaped="Here&amp;There"/>
+```
 
 * UTF-8 Support
 
@@ -204,22 +231,28 @@ incompatibility are:
   encoding is set to "UTF-8" and that the $KCODE variable is set to
   "UTF8".
 
+```ruby
     $KCODE = 'UTF8'
     xml = Builder::Markup.new
     xml.instruct!(:xml, :encoding => "UTF-8")
     xml.sample("Iñtërnâtiônàl")
     xml.target!  =>
       "<sample>Iñtërnâtiônàl</sample>"
+```
 
-== Links
+## Links
 
-Documents           :: http://builder.rubyforge.org/
-Github Clone        :: git://github.com/jimweirich/builder.git
-Issue / Bug Reports :: https://github.com/jimweirich/builder/issues?state=open
+| Description | Link |
+| :----: | :----: |
+| Documents           | http://builder.rubyforge.org/ |
+| Github Clone        | git://github.com/jimweirich/builder.git |
+| Issue / Bug Reports | https://github.com/jimweirich/builder/issues?state=open |
 
-== Contact
+## Contact
 
-Author::         Jim Weirich
-Email::          jim.weirich@gmail.com
-Home Page::      http://onestepback.org
-License::        MIT Licence (http://www.opensource.org/licenses/mit-license.html)
+| Title     | Value                  |
+| :----:    | :----:                 |
+| Author    | Jim Weirich            |
+| Email     | jim.weirich@gmail.com  |
+| Home Page | http://onestepback.org |
+| License   | MIT Licence (http://www.opensource.org/licenses/mit-license.html) |
