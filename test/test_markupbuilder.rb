@@ -59,23 +59,38 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal %{<ref id="12"/>}, @xml.target!
   end
 
-  def test_string_attributes_are_quoted_by_default
+  def test_single_quotes_for_attrs
+    @xml = Builder::XmlMarkup.new(:quote => :single)
+    @xml.ref(:id => 12)
+    assert_equal %{<ref id='12'/>}, @xml.target!
+  end
+
+  def test_mixed_quotes_for_attrs
+    @xml = Builder::XmlMarkup.new(:quote => :single)
+    x = Builder::XmlMarkup.new(:target=>@xml, :quote => :double)
+    @xml.ref(:id => 12) do
+      x.link(:id => 13)
+    end
+    assert_equal %{<ref id='12'><link id="13"/></ref>}, @xml.target!
+  end
+
+  def test_string_attributes_are_escaped_by_default
     @xml.ref(:id => "H&R")
     assert_equal %{<ref id="H&amp;R"/>}, @xml.target!
   end
 
-  def test_symbol_attributes_are_unquoted_by_default
+ def test_symbol_attributes_are_unescaped_by_default
     @xml.ref(:id => :"H&amp;R")
     assert_equal %{<ref id="H&amp;R"/>}, @xml.target!
   end
 
-  def test_attributes_quoted_can_be_turned_on
+  def test_attributes_escaping_can_be_turned_on
     @xml = Builder::XmlMarkup.new
     @xml.ref(:id => "<H&R \"block\">")
     assert_equal %{<ref id="&lt;H&amp;R &quot;block&quot;&gt;"/>}, @xml.target!
   end
 
-  def test_mixed_attribute_quoting_with_nested_builders
+  def test_mixed_attribute_escaping_with_nested_builders
     x = Builder::XmlMarkup.new(:target=>@xml)
     @xml.ref(:id=>:"H&amp;R") {
       x.element(:tag=>"Long&Short")

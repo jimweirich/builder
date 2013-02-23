@@ -162,20 +162,23 @@ module Builder
     # Create an XML markup builder.  Parameters are specified by an
     # option hash.
     #
-    # :target=><em>target_object</em>::
+    # :target => <em>target_object</em>::
     #    Object receiving the markup.  +target_object+ must respond to
     #    the <tt><<(<em>a_string</em>)</tt> operator and return
     #    itself.  The default target is a plain string target.
     #
-    # :indent=><em>indentation</em>::
+    # :indent => <em>indentation</em>::
     #    Number of spaces used for indentation.  The default is no
     #    indentation and no line breaks.
     #
-    # :margin=><em>initial_indentation_level</em>::
+    # :margin => <em>initial_indentation_level</em>::
     #    Amount of initial indentation (specified in levels, not
     #    spaces).
     #
-    # :escape_attrs=><em>OBSOLETE</em>::
+    # :quote => <em>:single</em>::
+    #    Use single quotes for attributes rather than double quotes.
+    #
+    # :escape_attrs => <em>OBSOLETE</em>::
     #    The :escape_attrs option is no longer supported by builder
     #    (and will be quietly ignored).  String attribute values are
     #    now automatically escaped.  If you need unescaped attribute
@@ -186,6 +189,7 @@ module Builder
     def initialize(options={})
       indent = options[:indent] || 0
       margin = options[:margin] || 0
+      @quote = (options[:quote] == :single) ? "'" : '"'
       @explicit_nil_handling = options[:explicit_nil_handling]
       super(indent, margin)
       @target = options[:target] || ""
@@ -306,10 +310,10 @@ module Builder
       return if attrs.nil?
       order.each do |k|
         v = attrs[k]
-        @target << %{ #{k}="#{_attr_value(v)}"} if v # " WART
+        @target << %{ #{k}=#{@quote}#{_attr_value(v)}#{@quote}} if v
       end
       attrs.each do |k, v|
-        @target << %{ #{k}="#{_attr_value(v)}"} unless order.member?(k) # " WART
+        @target << %{ #{k}=#{@quote}#{_attr_value(v)}#{@quote}} unless order.member?(k) # " WART
       end
     end
 
