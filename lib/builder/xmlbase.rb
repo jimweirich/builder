@@ -50,7 +50,7 @@ module Builder
           attrs.merge!(arg)
         when nil
           attrs ||= {}
-          attrs.merge!({nil: true}) if explicit_nil_handling?
+          attrs.merge!({:nil => true}) if explicit_nil_handling?
         else
           text ||= ''
           text << arg.to_s

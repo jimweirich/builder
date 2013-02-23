@@ -163,13 +163,13 @@ class TestMarkup < Test::Unit::TestCase
   end
 
   def test_nil_without_explicit_nil_handling
-    b = Builder::XmlMarkup.new(explicit_nil_handling: false)
+    b = Builder::XmlMarkup.new(:explicit_nil_handling => false)
     b.tag! "foo", nil
     assert_equal %{<foo/>}, b.target!
   end
 
   def test_nil_with_explicit_nil_handling
-    b = Builder::XmlMarkup.new(explicit_nil_handling: true)
+    b = Builder::XmlMarkup.new(:explicit_nil_handling => true)
     b.tag! "foo", nil
     assert_equal %{<foo nil="true"/>}, b.target!
   end
