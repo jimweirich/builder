@@ -12,7 +12,7 @@ require 'rake/testtask'
 begin
   require 'rubygems'
   require 'rubygems/package_task'
-  require 'rdoc/task'
+#  require 'rdoc/task'
 rescue Exception
   nil
 end
@@ -57,6 +57,8 @@ if defined?(RDoc)
     rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc').exclude("TAGS")
     rdoc.template = 'doc/jamis.rb'
   }
+else
+  rd = Struct.new(:rdoc_files).new([])
 end
 
 # ====================================================================
