@@ -49,13 +49,15 @@ end
 
 # Create a task to build the RDOC documentation tree.
 
-rd = RDoc::Task.new("rdoc") { |rdoc|
-  rdoc.rdoc_dir = 'html'
-  rdoc.title    = "Builder for Markup"
-  rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
-  rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc').exclude("TAGS")
-  rdoc.template = 'doc/jamis.rb'
-}
+if defined?(RDoc)
+  rd = RDoc::Task.new("rdoc") { |rdoc|
+    rdoc.rdoc_dir = 'html'
+    rdoc.title    = "Builder for Markup"
+    rdoc.options << '--line-numbers' << '--inline-source' << '--main' << 'README.rdoc'
+    rdoc.rdoc_files.include('lib/**/*.rb', '[A-Z]*', 'doc/**/*.rdoc').exclude("TAGS")
+    rdoc.template = 'doc/jamis.rb'
+  }
+end
 
 # ====================================================================
 # Create a task that will package the Rake software into distributable
