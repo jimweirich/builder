@@ -9,10 +9,10 @@
 
 require 'rake/clean'
 require 'rake/testtask'
-require 'rdoc/task'
 begin
   require 'rubygems'
   require 'rubygems/package_task'
+  require 'rdoc/task'
 rescue Exception
   nil
 end
