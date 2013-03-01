@@ -6,7 +6,7 @@ Provide a simple way to create XML markup and data structures.
 
 ## Classes
 
-Builder::XmlMarkup:: Generate XML markup notiation
+Builder::XmlMarkup:: Generate XML markup notation
 Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
 
 **Notes:**
@@ -55,14 +55,14 @@ occasionally used by a small number of developers.  Since strings
 could always be explicitly escaped by hand, this was not a major
 restriction in functionality.
 
-However, it did suprise most users of builder.  Since the body text is
+However, it did surprise most users of builder.  Since the body text is
 normally escaped, everybody expected the attribute values to be
 escaped as well.  Escaped attribute values were the number one support
 request on the 1.x Builder series.
 
 Starting with Builder version 2.0.0, all attribute values expressed as
 strings will be processed and the appropriate characters will be
-escaped (e.g. "&" will be tranlated to "&amp;").  Attribute values
+escaped (e.g. "&" will be translated to "&amp;").  Attribute values
 that are expressed as Symbol values will not be processed for escaped
 characters and will be unchanged in output. (Yes, this probably counts
 as Symbol abuse, but the convention is convenient and flexible).
@@ -161,7 +161,7 @@ incompatibility are:
   not allowed.
 
   If you need to have an argument to declare! be inserted without
-  quotes, but the arguement does not conform to the typical Ruby
+  quotes, but the argument does not conform to the typical Ruby
   syntax for symbols, then use the :"string" form to specify a symbol.
 
   For example:
@@ -206,7 +206,7 @@ incompatibility are:
   Builder (<b>NOTE:</b> this is _new_ behavior as of version 2.0).
 
   However, occasionally you need to use entities in attribute values.
-  Using a symbols (rather than a string) for an attribute value will
+  Using a symbol (rather than a string) for an attribute value will
   cause Builder to not run its quoting/escaping algorithm on that
   particular value.
 
