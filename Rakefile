@@ -66,9 +66,11 @@ end
 # gem files.
 
 PKG_FILES = FileList[
+  '[A-Z]*',
+  'doc/**/*',
   'lib/**/*.rb',
   'test/**/*.rb',
-  'scripts/**/*.rb'
+  'rakelib/**/*'
 ]
 PKG_FILES.exclude('test/test_cssbuilder.rb')
 PKG_FILES.exclude('lib/builder/css.rb')
