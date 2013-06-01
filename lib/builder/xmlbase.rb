@@ -17,14 +17,14 @@ module Builder
 
     # Create an XML markup builder.
     #
-    # out::      Object receiving the markup.  +out+ must respond to
-    #            <tt><<</tt>.
-    # indent::   Number of spaces used for indentation (0 implies no
-    #            indentation and no line breaks).
-    # initial::  Level of initial indentation.
-    # encoding:: When <tt>encoding</tt> and $KCODE are set to 'utf-8'
-    #            characters aren't converted to character entities in
-    #            the output stream.
+    # out      :: Object receiving the markup.  +out+ must respond to
+    #             <tt><<</tt>.
+    # indent   :: Number of spaces used for indentation (0 implies no
+    #             indentation and no line breaks).
+    # initial  :: Level of initial indentation.
+    # encoding :: When <tt>encoding</tt> and $KCODE are set to 'utf-8'
+    #             characters aren't converted to character entities in
+    #             the output stream.
     def initialize(indent=0, initial=0, encoding='utf-8')
       @indent = indent
       @level  = initial
