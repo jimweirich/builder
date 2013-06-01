@@ -12,7 +12,7 @@ require 'rake/testtask'
 begin
   require 'rubygems'
   require 'rubygems/package_task'
-#  require 'rdoc/task'
+  require 'rdoc/task'
 rescue Exception
   nil
 end
@@ -21,7 +21,7 @@ require './lib/builder/version'
 
 # Determine the current version of the software
 
-CLOBBER.include('pkg')
+CLOBBER.include('pkg', 'html')
 CLEAN.include('pkg/builder-*').include('pkg/blankslate-*').exclude('pkg/*.gem')
 
 PKG_VERSION = Builder::VERSION
