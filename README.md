@@ -23,7 +23,7 @@ Builder::XmlEvents:: Generate XML events (i.e. SAX-like)
   require_gem 'builder', '~> 2.0'
 
   builder = Builder::XmlMarkup.new
-`  xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
+  xml = builder.person { |b| b.name("Jim"); b.phone("555-1234") }
   xml #=> <person><name>Jim</name><phone>555-1234</phone></person>
 ```
 
@@ -62,7 +62,7 @@ request on the 1.x Builder series.
 
 Starting with Builder version 2.0.0, all attribute values expressed as
 strings will be processed and the appropriate characters will be
-escaped (e.g. "&" will be translated to "&amp;").  Attribute values
+escaped (e.g. "&" will be translated to "&amp;amp;").  Attribute values
 that are expressed as Symbol values will not be processed for escaped
 characters and will be unchanged in output. (Yes, this probably counts
 as Symbol abuse, but the convention is convenient and flexible).
