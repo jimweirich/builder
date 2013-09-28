@@ -41,6 +41,7 @@ module Builder
     def tag!(sym, *args, &block)
       text = nil
       attrs = nil
+      escape_text = true
       sym = "#{sym}:#{args.shift}" if args.first.kind_of?(::Symbol)
       sym = sym.to_sym unless sym.class == ::Symbol
       args.each do |arg|
@@ -51,6 +52,8 @@ module Builder
         when nil
           attrs ||= {}
           attrs.merge!({:nil => true}) if explicit_nil_handling?
+        when true, false
+          escape_text = arg
         else
           text ||= ''
           text << arg.to_s
@@ -78,7 +81,11 @@ module Builder
       else
         _indent
         _start_tag(sym, attrs)
-        text! text
+        if escape_text
+          text! text
+        else
+          self << text
+        end
         _end_tag(sym)
         _newline
       end
