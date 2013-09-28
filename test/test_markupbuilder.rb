@@ -194,6 +194,11 @@ class TestMarkup < Test::Unit::TestCase
     assert_equal %{<div ns:xml="&xml;"><h&i><em>H&amp;R Block</em></div>}, @xml.target!
   end
 
+  def test_dont_escape
+    @xml.div({"id"=>2}, false, 'H&amp;R Block')
+    assert_equal %{<div id="2">H&amp;R Block</div>}, @xml.target!
+  end
+
   def test_return_value
     str = @xml.x("men")
     assert_equal @xml.target!, str
