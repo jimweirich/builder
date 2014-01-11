@@ -12,7 +12,7 @@ module Tags
 
   PROJECT_DIR = ['.']
 
-  RVM_GEMDIR = File.join(`rvm gemdir`.strip, "gems")
+  RVM_GEMDIR = File.join(Gem.dir, "gems")
   SYSTEM_DIRS = File.exists?(RVM_GEMDIR) ? RVM_GEMDIR : []
 
   module_function
