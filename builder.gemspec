@@ -1,18 +1,14 @@
 require './lib/builder/version'
-require 'rake/file_list'
 
 PKG_VERSION = Builder::VERSION
 
-PKG_FILES = Rake::FileList[
+PKG_FILES = Dir[
   '[A-Z]*',
   'doc/**/*',
   'lib/**/*.rb',
   'test/**/*.rb',
   'rakelib/**/*'
 ]
-PKG_FILES.exclude('test/test_cssbuilder.rb')
-PKG_FILES.exclude('lib/builder/css.rb')
-PKG_FILES.exclude('TAGS')
 
 Gem::Specification.new do |s|
 
@@ -29,7 +25,7 @@ simple to do.  Currently the following builder objects are supported:
 * XML Events
 }
 
-  s.files = PKG_FILES.to_a
+  s.files = PKG_FILES
   s.require_path = 'lib'
 
   s.test_files = PKG_FILES.select { |fn| fn =~ /^test\/test/ }
