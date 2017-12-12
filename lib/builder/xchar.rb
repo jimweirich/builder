@@ -19,7 +19,7 @@ end
 
 if ! defined?(Builder::XChar) and ! String.method_defined?(:encode)
   Builder.check_for_name_collision(String, "to_xs")
-  Builder.check_for_name_collision(Fixnum, "xchr")
+  Builder.check_for_name_collision(Integer, "xchr")
 end
 
 ######################################################################
@@ -108,7 +108,7 @@ if String.method_defined?(:encode)
       INVALID_XML_CHAR = Regexp.new('[^'+
         Builder::XChar::VALID.map { |item|
           case item
-          when Fixnum
+          when Integer
             [item].pack('U').force_encoding('utf-8')
           when Range
             [item.first, '-'.ord, item.last].pack('UUU').force_encoding('utf-8')
@@ -160,9 +160,9 @@ if String.method_defined?(:encode)
 else
 
   ######################################################################
-  # Enhance the Fixnum class with a XML escaped character conversion.
+  # Enhance the Integer class with a XML escaped character conversion.
   #
-  class Fixnum
+  class Integer
     XChar = Builder::XChar if ! defined?(XChar)
   
     # XML escaped version of chr. When <tt>escape</tt> is set to false
