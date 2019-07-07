@@ -117,15 +117,15 @@ module Builder
   #
   #   Example:
   #
-  #     xm = Builder.new(:indent=>2)
+  #     xm = Builder::XmlMarkup.new(:indent=>2)
   #     # xm will produce nicely formatted and indented XML.
   #
-  #     xm = Builder.new(:indent=>2, :margin=>4)
+  #     xm = Builder::XmlMarkup.new(:indent=>2, :margin=>4)
   #     # xm will produce nicely formatted and indented XML with 2
   #     # spaces per indent and an over all indentation level of 4.
   #
   #     builder = Builder::XmlMarkup.new(:target=>$stdout, :indent=>2)
-  #     builder.name { |b| b.first("Jim"); b.last("Weirich) }
+  #     builder.name { |b| b.first("Jim"); b.last("Weirich") }
   #     # prints:
   #     #     <name>
   #     #       <first>Jim</first>
