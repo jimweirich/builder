@@ -244,7 +244,7 @@ incompatibility are:
 
 | Description | Link |
 | :----: | :----: |
-| Documents           | [http://builder.rubyforge.org/](https://apidock.com/rails/Builder/XmlMarkup) |
+| Documents           | https://apidock.com/rails/Builder/XmlMarkup |
 | Github Clone        | git://github.com/jimweirich/builder.git |
 | Issue / Bug Reports | https://github.com/jimweirich/builder/issues?state=open |
 
